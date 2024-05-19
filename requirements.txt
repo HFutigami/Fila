@@ -1,0 +1,5 @@
+office365==0.3.15
+pandas==2.1.4
+plotly==5.19.0
+office365-REST-Python-Client==2.5.5
+openpyxl
