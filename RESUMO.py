@@ -16,6 +16,7 @@ sharepoint_password = 'VY&ks28@AM2!hs1'
 
 saldo_fila_url = '/sites/PowerBi-Estoque/Documentos%20Compartilhados/General/Fila/saldo.parquet'
 saldo_file_url = '/sites/PowerBi-Estoque/Documentos%20Compartilhados/General/Fila/'
+varejo_liberado_url = '/sites/PowerBi-Estoque/Documentos%20Compartilhados/General/Fila/Varejo%20Liberado/'
 
 auth = AuthenticationContext(sharepoint_base_url)
 auth.acquire_token_for_user(sharepoint_user, sharepoint_password)
@@ -34,6 +35,15 @@ def df_sharep(file_url):
     bytes_file_obj.seek(0)
     return pd.read_parquet(bytes_file_obj)
 
+def df_varejo_liberado(data):
+    file_response = File.open_binary(ctx, varejo_liberado_url + data + ".xlsx")
+    bytes_file_obj = io.BytesIO()
+    bytes_file_obj.write(file_response.content)
+    bytes_file_obj.seek(0)
+    return pd.read_excel(bytes_file_obj,
+                         sheet_name='LAB. - SEPARAÇÃO',
+                         dtype='str')
+    
 
 ### DattaFrames
 
@@ -106,9 +116,7 @@ saldo_atual_contratos.rename(columns={'SERIAL':'QUANTIDADE'}, inplace=True)
 
 
 # Varejo liberado
-processos_varejo = pd.read_excel('PROCESSOS VAREJO_ BACKLOG_SEPARAÇÃO_ANALISE TECNICA 16.05.24.xlsx',
-                                 sheet_name='LAB. - SEPARAÇÃO',
-                                 dtype='str')
+processos_varejo = df_varejo_liberado("2024-05-16")
 processos_varejo = processos_varejo[['Nr Serie', 'Num OS', 'Produto_1']]
 processos_varejo.rename(columns={'Nr Serie':'SERIAL', 'Num OS':'NUM OS'}, inplace=True)
 processos_varejo.set_index(['SERIAL', 'NUM OS'], inplace=True)
