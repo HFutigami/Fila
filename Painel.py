@@ -19,6 +19,8 @@ if 'connection' not in st.session_state:
                 if usuario == st.secrets.credenciais.USER and senha == st.secrets.credenciais.SENHA:
                     st.session_state['connection'] = 'editor'
                     st.rerun()
+                else:
+                    st.warning('Usuário ou senha inválidos.', icon="⚠️")
             st.session_state['connection'] = 'a'
             st.rerun()
 else:
