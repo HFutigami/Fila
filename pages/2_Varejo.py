@@ -344,7 +344,7 @@ else:
         varejo_compactado['SERIAL'] = varejo_compactado['SERIAL'].apply(lambda x: "TOTAL: " + str(x))
             
         df = pd.concat([varejo_compactado, df])
-        st.dataframe(df)
+        df['SEPARADO'] = ''
         df = df[['NUM OS', 'SERIAL',
             'CAIXA', 'CLIENTE',
             'EQUIPAMENTO', 'ENDEREÇO',
