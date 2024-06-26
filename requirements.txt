@@ -4,6 +4,5 @@ plotly==5.19.0
 office365-REST-Python-Client==2.5.5
 openpyxl
 workalendar
-webbrowser
 datetime
 time
