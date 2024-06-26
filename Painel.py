@@ -16,7 +16,7 @@ if 'connection' not in st.session_state:
         submitted = st.form_submit_button("Login")
         if submitted:
             with st.spinner('Conectando...'):
-                if usuario == 'julio':
+                if usuario == st.secrets.credenciais.USER and senha == st.secrets.credenciais.SENHA:
                     st.session_state['connection'] = 'editor'
                     st.rerun()
             st.session_state['connection'] = 'a'
