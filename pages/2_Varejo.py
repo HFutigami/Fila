@@ -484,10 +484,6 @@ else:
 
     st.sidebar.header('')
     st.sidebar.title('AÇÕES')
-    
-    if st.sidebar.button('LISTA DE LIBERAÇÃO', use_container_width=True):
-        'html_saldo_contrato()'
-
 
     tabs_saldo, tabs_liberado, tabs_saida, tabs_geral = st.tabs(['Saldo', 'Liberado', 'Saídas', 'Tabela Geral'])
 
@@ -578,7 +574,8 @@ else:
     else:
         df_varejo_liberado = st.session_state['varejo_liberado']
 
-
+    st.download_button(label='Baixar Tabela', data=html_varejo(), file_name=f'Varejo {str(dt_varejo)}.html')
+    
     if 'varejo_liberado' in st.session_state:
         if len(st.session_state['varejo_liberado']) > 0:
             if 'varejo_liberado_resumido' not in st.session_state:
