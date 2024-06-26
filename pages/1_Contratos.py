@@ -488,7 +488,7 @@ else:
     st.sidebar.header('')
     st.sidebar.title('AÇÕES')
     
-    st.sidebar.download_button('BAIXAR RESUMO', html_saldo_contrato(), use_container_width=True)
+    st.sidebar.download_button('BAIXAR RESUMO', html_saldo_contrato(), use_container_width=True, file_name='Contratos.html')
         
 
 
