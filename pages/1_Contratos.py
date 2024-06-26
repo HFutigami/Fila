@@ -356,13 +356,7 @@ else:
         html_contratos = html_contratos.replace('<table border="1" class="dataframe">',
                                             '<style>\ntable {\n  border-collapse: collapse;\n  width: 100%;\n}\n\nth, td {\n  text-align: center;\n  padding-top: 2px;\n  padding-bottom: 1px;\n  padding-left: 8px;\n  padding-right: 8px;\n}\n\ntr:nth-child(even) {\n  background-color: #DCDCDC;\n}\n\ntable, th, td {\n  border: 2px solid black;\n  border-collapse: collapse;\n}\n</style>\n<table border="1" class="dataframe">')
         
-        temp_file = f'Contratos.html'
-        with open(temp_file, 'w', encoding='utf-8') as f:
-            f.write(html_contratos)
-
-        # Abra o arquivo HTML no navegador padrão
-        file_path = 'file://' + os.path.abspath(temp_file)
-        webbrowser.open(file_path)
+        return html_contratos
 
 
     @st.experimental_dialog("Filtros de Saldo", width='large')
@@ -494,8 +488,8 @@ else:
     st.sidebar.header('')
     st.sidebar.title('AÇÕES')
     
-    if st.sidebar.button('BAIXAR RESUMO', use_container_width=True):
-        html_saldo_contrato()
+    st.sidebar.download_button('BAIXAR RESUMO', html_saldo_contrato(), use_container_width=True):
+        
 
 
     tabs_saldo, tabs_saida, tabs_geral = st.tabs(['Saldo', 'Saídas', 'Tabela Geral'])
