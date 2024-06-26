@@ -21,8 +21,6 @@ if 'connection' not in st.session_state:
                     st.rerun()
                 else:
                     st.warning('Usuário ou senha inválidos.', icon="⚠️")
-            st.session_state['connection'] = 'a'
-            st.rerun()
 else:
     st.set_page_config('ESTOQUE • FILA', page_icon='https://i.imgur.com/mOEfCM8.png', layout='wide')
         
