@@ -5,4 +5,3 @@ office365-REST-Python-Client==2.5.5
 openpyxl
 workalendar
 datetime
-time
