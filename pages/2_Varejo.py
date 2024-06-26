@@ -340,7 +340,6 @@ else:
     
     def html_varejo():
         df = st.session_state['varejo_liberado'].copy()
-        st.dataframe(df)
         varejo_compactado = df.groupby(['NUM OS', 'CLIENTE', 'ENDEREÇO'])['SERIAL'].count().reset_index().copy()
         varejo_compactado['SERIAL'] = varejo_compactado['SERIAL'].apply(lambda x: "TOTAL: " + str(x))
             
@@ -574,11 +573,12 @@ else:
             pass
     else:
         df_varejo_liberado = st.session_state['varejo_liberado']
-
-    st.download_button(label='Baixar Tabela', data=html_varejo(), file_name=f'Varejo {str(dt_varejo)}.html')
     
     if 'varejo_liberado' in st.session_state:
         if len(st.session_state['varejo_liberado']) > 0:
+
+            st.download_button(label='Baixar Tabela', data=html_varejo(), file_name=f'Varejo {str(dt_varejo)}.html')
+            
             if 'varejo_liberado_resumido' not in st.session_state:
                 st.session_state['varejo_liberado_resumido'] = create_df_varejo_liberado_resumido(df_varejo_liberado)
                 try:
