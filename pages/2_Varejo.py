@@ -340,6 +340,7 @@ else:
     
     def html_varejo():
         df = st.session_state['varejo_liberado'].copy()
+        st.dataframe(df)
         varejo_compactado = df.groupby(['NUM OS', 'CLIENTE', 'ENDEREÇO'])['SERIAL'].count().reset_index().copy()
         varejo_compactado['SERIAL'] = varejo_compactado['SERIAL'].apply(lambda x: "TOTAL: " + str(x))
             
