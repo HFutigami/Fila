@@ -22,7 +22,6 @@ else:
     st.set_page_config('ESTOQUE • FILA', page_icon='https://i.imgur.com/mOEfCM8.png', layout='wide')
         
     st.image('https://seeklogo.com/images/G/gertec-logo-D1C911377C-seeklogo.com.png?v=637843433630000000', width=200)
-    st.header('', divider='gray')
 
     st.sidebar.title('MÓDULOS')
     if st.session_state['connection'] == 'editor':
