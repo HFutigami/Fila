@@ -578,7 +578,7 @@ else:
     if 'varejo_liberado' in st.session_state:
         if len(st.session_state['varejo_liberado']) > 0:
 
-            st.download_button(label='Baixar Tabela', data=html_varejo(), file_name=f'Varejo {str(dt_varejo)}.html')
+            st.sidebar.download_button(label='BAIXAR LIBERADOS', data=html_varejo(), file_name=f'Varejo {str(dt_varejo)}.html')
             
             if 'varejo_liberado_resumido' not in st.session_state:
                 st.session_state['varejo_liberado_resumido'] = create_df_varejo_liberado_resumido(df_varejo_liberado)
