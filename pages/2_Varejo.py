@@ -336,6 +336,24 @@ else:
                           yaxis_visible=False)
 
         return fig
+
+    
+    def html_varejo():
+        df = st.session_state['varejo_liberado'].copy()
+        varejo_compactado = df.groupby(['NUM OS', 'CLIENTE', 'ENDEREÇO'])['SERIAL'].count().reset_index().copy()
+        varejo_compactado['SERIAL'] = varejo_compactado['SERIAL'].apply(lambda x: "TOTAL: " + str(x))
+            
+        df = pd.concat([varejo_compactado, df])
+        df = df[['NUM OS', 'SERIAL',
+            'CAIXA', 'CLIENTE',
+            'EQUIPAMENTO', 'ENDEREÇO',
+            'SEPARADO', 'GARANTIA']].sort_values(['ENDEREÇO', 'NUM OS', 'SERIAL'])
+        df.loc[df['SERIAL'].str.startswith('TOTAL'), ['NUM OS', 'CAIXA', 'CLIENTE', 'EQUIPAMENTO', 'ENDEREÇO', 'SEPARADO', 'GARANTIA']] = ''
+        
+        html_content = df.to_html(index=False, index_names=False, justify='left', na_rep='')
+        html_content = html_content.replace('<table border="1" class="dataframe">',
+                                          '<style>\ntable {\n  border-collapse: collapse;\n  width: 100%;\n}\n\nth, td {\n  text-align: center;\n  padding-top: 2px;\n  padding-bottom: 1px;\n  padding-left: 8px;\n  padding-right: 8px;\n}\n\ntr:nth-child(even) {\n  background-color: #DCDCDC;\n}\n\ntable, th, td {\n  border: 2px solid black;\n  border-collapse: collapse;\n}\n</style>\n<table border="1" class="dataframe">')
+        return html_content
     
 
     @st.experimental_dialog("Filtros de Saldo", width='large')
