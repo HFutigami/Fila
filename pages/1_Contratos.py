@@ -487,10 +487,6 @@ else:
 
     st.sidebar.header('')
     st.sidebar.title('AÇÕES')
-    
-    st.sidebar.download_button('BAIXAR RESUMO', html_saldo_contrato(), use_container_width=True, file_name='Contratos.html')
-        
-
 
     tabs_saldo, tabs_saida, tabs_geral = st.tabs(['Saldo', 'Saídas', 'Tabela Geral'])
 
@@ -511,6 +507,8 @@ else:
     else:
         df_saldo_atual_contratos = st.session_state['df_saldo_atual_contratos']
         df_saldo_atual_contratos_resumido = st.session_state['df_saldo_atual_contratos_resumido']
+        
+    st.sidebar.download_button('BAIXAR RESUMO', html_saldo_contrato(), use_container_width=True, file_name='Contratos.html')
 
     r1c1.write('Resumo de saldo de equipamentos.')
     saldo_atual_contratos = r1c1.dataframe(
