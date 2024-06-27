@@ -78,6 +78,43 @@ else:
         
         # Saldo geral
         historico_fila = df_sharep(saldo_fila_url)
+
+        lista_clientes_contrato = ['REDE',
+                                    'Stone',
+                                    'Wyntech',
+                                    'Getnet',
+                                    'MERCADOPAGO.COM',
+                                    'CIELO',
+                                    'Procomp',
+                                    'NCR',
+                                    'COBRA_JOAO PESSOA',
+                                    'COBRA_GOIANIA',
+                                    'COBRA',
+                                    'COBRA_PORTO VELHO',
+                                    'COBRA_TERESINA',
+                                    'FD',
+                                    'COBRA_RIO DE JANEIRO_2',
+                                    'COBRA_BAURU',
+                                    'COBRA_CURITIBA',
+                                    'COBRA_RIBEIRAO PRETO',
+                                    'BB_CAMPINAS',
+                                    'COBRA_FLORIANOPOLIS',
+                                    'COBRA_BELEM',
+                                    'COBRA_JOINVILLE',
+                                    'COBRA_LONDRINA',
+                                    'COBRA_BARUERI',
+                                    'BB',
+                                    'COBRA_JABOATAO DOS GUARARAPES',
+                                    'MARTINS',
+                                    'Paygo',
+                                    'ALEXANDRE',
+                                    'MERCADO PAGO',
+                                    'SERVICO',
+                                    'COBRA_SAO LUIS',
+                                    'COBRA_PORTO ALEGRE',
+                                    'PAGSEGURO_OSASCO',
+                                    'COBRA_BRASILIA']
+        historico_fila.loc[historico_fila['CLIENTE'].isin(lista_clientes_contrato), 'FLUXO'] = '000001'
         historico_fila['FLUXO'] = historico_fila['FLUXO'].str.replace('000001', 'CONTRATO')
         historico_fila['FLUXO'] = historico_fila['FLUXO'].str.replace('000002', 'VAREJO')
         historico_fila['FLUXO'] = historico_fila['FLUXO'].str.replace('000003', 'VAREJO')
