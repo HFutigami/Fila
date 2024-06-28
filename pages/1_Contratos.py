@@ -607,8 +607,12 @@ else:
         if len(saidas_contratos_selecao[saidas_contratos_selecao['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)]) > 0:
             filtro_ontem = ((saidas_contratos_selecao['SAÍDA FILA'] >= datetime.today()-timedelta(days=1, hours=datetime.today().hour, minutes=datetime.today().minute)) &
                             (saidas_contratos_selecao['SAÍDA FILA'] <= datetime.today()-timedelta(hours=datetime.today().hour+1, minutes=datetime.today().minute)))
-            t2r0c2.metric('Saídas do dia (seleção)', '{:,}'.format(len(saidas_contratos_selecao[saidas_contratos_selecao['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)])).replace(',','.'),
-                        delta='{:.2%}'.format(((len(saidas_contratos_selecao[saidas_contratos_selecao['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)])) - len(saidas_contratos_selecao[filtro_ontem])) / len(saidas_contratos_selecao[filtro_ontem])))
+            try:
+                t2r0c2.metric('Saídas do dia (seleção)', '{:,}'.format(len(saidas_contratos_selecao[saidas_contratos_selecao['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)])).replace(',','.'),
+                            delta='{:.2%}'.format(((len(saidas_contratos_selecao[saidas_contratos_selecao['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)])) - len(saidas_contratos_selecao[filtro_ontem])) / len(saidas_contratos_selecao[filtro_ontem])))
+            except:
+                t2r0c2.metric('Saídas do dia (seleção)', '{:,}'.format(len(saidas_contratos_selecao[saidas_contratos_selecao['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)])).replace(',','.'),
+                            delta='{:.2%}'.format(0))
         else: t2r0c2.metric('Saídas do dia (seleção)', 0)
     else:
         t2r0c1.metric('Total de saídas', '{:,}'.format(sum(df_saidas_contratos_resumido['QUANTIDADE'])).replace(',','.'))
