@@ -698,8 +698,12 @@ else:
         if len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()]) > 0:
             filtro_ontem = ((saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()-timedelta(days=1, hours=datetime.today().hour, minutes=datetime.today().minute)) &
                             (saidas_varejo_selecao['SAÍDA FILA'] <= datetime.today()-timedelta(hours=datetime.today().hour, minutes=datetime.today().minute)))
-            t3r0c2.metric('Saídas do dia (seleção)', '{:,}'.format(len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])).replace(',','.'),
-                        delta='{:.2%}'.format(((len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])) - len(saidas_varejo_selecao[filtro_ontem])) / len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])))
+            try:
+                t3r0c2.metric('Saídas do dia (seleção)', '{:,}'.format(len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])).replace(',','.'),
+                            delta='{:.2%}'.format(((len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])) - len(saidas_varejo_selecao[filtro_ontem])) / len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])))
+            except:
+                t3r0c2.metric('Saídas do dia (seleção)', '{:,}'.format(len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])).replace(',','.'),
+                            delta='{:.2%}'.format(100))
         else: t3r0c2.metric('Saídas do dia (seleção)', 0)
     else:
         t3r0c1.metric('Total de saídas', '{:,}'.format(sum(df_saidas_varejo_resumido['QUANTIDADE'])).replace(',','.'))
