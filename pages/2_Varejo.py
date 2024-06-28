@@ -703,7 +703,7 @@ else:
                             delta='{:.2%}'.format(((len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])) - len(saidas_varejo_selecao[filtro_ontem])) / len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])))
             except:
                 t3r0c2.metric('Saídas do dia (seleção)', '{:,}'.format(len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])).replace(',','.'),
-                            delta='{:.2%}'.format(100))
+                            delta='{:.2%}'.format(1))
         else: t3r0c2.metric('Saídas do dia (seleção)', 0)
     else:
         t3r0c1.metric('Total de saídas', '{:,}'.format(sum(df_saidas_varejo_resumido['QUANTIDADE'])).replace(',','.'))
