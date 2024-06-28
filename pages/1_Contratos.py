@@ -35,8 +35,8 @@ else:
     sharepoint_fila_url = 'https://gertecsao.sharepoint.com/sites/PowerBi-Estoque/'
     sharepoint_os_url = 'https://gertecsao.sharepoint.com/sites/RecebimentoLogstica/'
     folder_in_sharepoint = '/sites/PowerBi-Estoque/Documentos%20Compartilhados/General/Fila'
-    sharepoint_user = 'gertec.visualizador@gertec.com.br'
-    sharepoint_password = 'VY&ks28@AM2!hs1'
+    sharepoint_user = st.secrets.sharepoint.USER
+    sharepoint_password = st.secrets.sharepoint.SENHA
     
     saldo_fila_url = '/sites/PowerBi-Estoque/Documentos%20Compartilhados/General/Fila/saldo.parquet'
     varejo_liberado_url = '/sites/PowerBi-Estoque/Documentos%20Compartilhados/General/Fila/Varejo%20Liberado/'
