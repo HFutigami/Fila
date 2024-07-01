@@ -173,8 +173,6 @@ else:
 
         df_saldo_atual_os_interna_resumido = df.groupby(['NUM OS', 'EQUIPAMENTO'])[['SERIAL']].count().reset_index()
         
-        df_saldo_atual_os_interna_resumido.loc[df_saldo_atual_os_interna_resumido['SERIAL'].isna(), 'SERIAL'] = 0
-        df_saldo_atual_os_interna_resumido.SERIAL = df_saldo_atual_os_interna_resumido.SERIAL.astype(int)
         df_saldo_atual_os_interna_resumido.rename(columns={'SERIAL':'QUANTIDADE'}, inplace=True)
         df_saldo_atual_os_interna_resumido = df_saldo_atual_os_interna_resumido[['NUM OS', 'EQUIPAMENTO', 'QUANTIDADE']]
         try:
@@ -285,6 +283,9 @@ else:
                                                            'QUANTIDADE']].groupby(
                                                                 ['NUM OS'])['QUANTIDADE'].sum(
                                                            ).reset_index().sort_values(['QUANTIDADE'], ascending=False).head(5)
+        df['NUM OS'] = df['NUM OS'].astype('str')
+        df['NUM OS'] = "ㅤ" + df['NUM OS']
+        
 
         fig = px.bar(df,
                      x='NUM OS',
