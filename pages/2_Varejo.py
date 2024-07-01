@@ -113,7 +113,8 @@ else:
                                     'COBRA_SAO LUIS',
                                     'COBRA_PORTO ALEGRE',
                                     'PAGSEGURO_OSASCO',
-                                    'COBRA_BRASILIA']
+                                    'COBRA_BRASILIA',
+                                    'MOOZ']
         historico_fila.loc[historico_fila['CLIENTE'].isin(lista_clientes_contrato), 'FLUXO'] = '000001'
         historico_fila.loc[historico_fila['CLIENTE'] == 'GERTEC', 'FLUXO'] = '000004'
         historico_fila.loc[historico_fila['FLUXO'] == 'NÃO DEFINIDO', 'FLUXO'] = '000002'
