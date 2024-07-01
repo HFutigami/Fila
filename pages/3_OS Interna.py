@@ -477,8 +477,6 @@ else:
     else:
         df_saldo_atual_os_interna = st.session_state['df_saldo_atual_os_interna']
         df_saldo_atual_os_interna_resumido = st.session_state['df_saldo_atual_os_interna_resumido']
-        
-    st.sidebar.download_button('BAIXAR RESUMO', html_saldo_OS INTERNA(), use_container_width=True, file_name='os_interna.html')
 
     r1c1.write('Resumo de saldo de equipamentos.')
     saldo_atual_os_interna = r1c1.dataframe(
