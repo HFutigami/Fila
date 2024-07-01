@@ -298,7 +298,7 @@ else:
     def create_fig_status_saidas():
         df = st.session_state['saidas_varejo_selecao'].copy()
         df['SAÍDA FILA'] = df['SAÍDA FILA'].dt.strftime('%Y/%m')
-        df = df.groupby(['ENTRADA FILA', 'STATUS'])['EQUIPAMENTO'].count().reset_index()
+        df = df.groupby(['SAÍDA FILA', 'STATUS'])['EQUIPAMENTO'].count().reset_index()
         df.rename(columns={'EQUIPAMENTO':'QUANTIDADE'}, inplace=True)
         
         fig = px.bar(df,
