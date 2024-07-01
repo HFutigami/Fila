@@ -171,14 +171,14 @@ else:
 
     def create_df_saldo_os_interna_resumido(df):
 
-        df_saldo_atual_os_interna_resumido = df.groupby(['CLIENTE', 'EQUIPAMENTO'])[['SERIAL']].count().reset_index()
+        df_saldo_atual_os_interna_resumido = df.groupby(['NUM OS', 'EQUIPAMENTO'])[['SERIAL']].count().reset_index()
         
         df_saldo_atual_os_interna_resumido.loc[df_saldo_atual_os_interna_resumido['SERIAL'].isna(), 'SERIAL'] = 0
         df_saldo_atual_os_interna_resumido.SERIAL = df_saldo_atual_os_interna_resumido.SERIAL.astype(int)
         df_saldo_atual_os_interna_resumido.rename(columns={'SERIAL':'QUANTIDADE'}, inplace=True)
-        df_saldo_atual_os_interna_resumido = df_saldo_atual_os_interna_resumido[['CLIENTE', 'EQUIPAMENTO', 'QUANTIDADE']]
+        df_saldo_atual_os_interna_resumido = df_saldo_atual_os_interna_resumido[['NUM OS', 'EQUIPAMENTO', 'QUANTIDADE']]
         try:
-            df_saldo_atual_os_interna_resumido.sort_values(['CLIENTE', 'EQUIPAMENTO'], inplace=True)
+            df_saldo_atual_os_interna_resumido.sort_values(['NUM OS', 'EQUIPAMENTO'], inplace=True)
         except:
             pass
 
@@ -194,10 +194,10 @@ else:
 
     def create_df_saidas_os_interna_resumido(df):
 
-        df = df.groupby(['CLIENTE', 'EQUIPAMENTO'])[['SERIAL']].count().reset_index()
+        df = df.groupby(['NUM OS', 'EQUIPAMENTO'])[['SERIAL']].count().reset_index()
         df = df.rename(columns={'SERIAL':'QUANTIDADE'})
         try:
-            df = df.sort_values([['CLIENTE', 'EQUIPAMENTO']])
+            df = df.sort_values([['NUM OS', 'EQUIPAMENTO']])
         except:
             pass
 
@@ -209,7 +209,7 @@ else:
         df['CAIXA'] = df['CAIXA'].astype('str')
         df['CAIXA'] = "ㅤ" + df['CAIXA']
         df['ENTRADA FILA'] = df['ENTRADA FILA'].astype('str')
-        df['RÓTULO'] = df['CLIENTE'] + ' - ' + df['ENDEREÇO'] + ' - ' + df['ENTRADA FILA'].str.replace('-','/').str.split(" ").str[0]
+        df['RÓTULO'] = df['NUM OS'] + ' - ' + df['ENDEREÇO'] + ' - ' + df['ENTRADA FILA'].str.replace('-','/').str.split(" ").str[0]
         df = df.groupby(['CAIXA', 'RÓTULO', '% DO SLA'])['SERIAL'].count().reset_index().sort_values('% DO SLA', ascending=True).tail(10)
         
         fig = px.bar(df,
@@ -280,14 +280,14 @@ else:
 
 
     def create_fig_volume_fila(rows):
-        df = df_saldo_atual_os_interna_resumido.iloc[rows][['CLIENTE',
+        df = df_saldo_atual_os_interna_resumido.iloc[rows][['NUM OS',
                                                            'EQUIPAMENTO',
                                                            'QUANTIDADE']].groupby(
-                                                                ['CLIENTE'])['QUANTIDADE'].sum(
+                                                                ['NUM OS'])['QUANTIDADE'].sum(
                                                            ).reset_index().sort_values(['QUANTIDADE'], ascending=False).head(5)
 
         fig = px.bar(df,
-                     x='CLIENTE',
+                     x='NUM OS',
                      y='QUANTIDADE',
                      color_discrete_sequence=['#13399A'],
                      orientation='v',
@@ -310,14 +310,13 @@ else:
 
         df2 = st.session_state['df_saldo_atual_os_interna_resumido']
 
-        fr1c1, fr1c2 = st.columns(2)
+        fr1c1 = st.container()
         fr2c1, fr2c2 = st.columns(2)
         fr3c1, fr3c2 = st.columns(2)
         fr4c1, fr4c2 = st.columns(2)
         fr5c1, fr5c2 = st.columns(2)
 
-        ft_cliente = fr1c1.multiselect('CLIENTE', df2['CLIENTE'].unique())
-        ft_equip = fr1c2.multiselect('EQUIPAMENTO', df2['EQUIPAMENTO'].unique())
+        ft_equip = fr1c1.multiselect('EQUIPAMENTO', df2['EQUIPAMENTO'].unique())
 
         ft_os = fr2c1.multiselect('NUM OS', df['NUM OS'].unique())
         ft_ns = fr2c2.multiselect('SERIAL', df['SERIAL'].unique())
@@ -332,8 +331,6 @@ else:
         ft_dtfila_max = fr5c2.date_input(' ', value=max(df['ENTRADA FILA']), format='DD/MM/YYYY')
 
         if st.button('APLICAR FILTROS', use_container_width=True):
-            if ft_cliente:
-                df = df[df['CLIENTE'].isin(ft_cliente)]
             if ft_equip:
                 df = df[df['EQUIPAMENTO'].isin(ft_equip)]
             if ft_os:
@@ -351,8 +348,6 @@ else:
             st.session_state['df_saldo_atual_os_interna'] = create_df_saldo_os_interna(df)
             df_sacr = create_df_saldo_os_interna_resumido(st.session_state['df_saldo_atual_os_interna'])
 
-            if ft_cliente:
-                df_sacr = df_sacr[df_sacr['CLIENTE'].isin(ft_cliente)]
             if ft_equip:
                 df_sacr = df_sacr[df_sacr['EQUIPAMENTO'].isin(ft_equip)]
 
@@ -368,14 +363,13 @@ else:
 
         df2 = st.session_state['df_saidas_os_interna_resumido']
 
-        fr1c1, fr1c2 = st.columns(2)
+        fr1c1 = st.container()
         fr2c1, fr2c2 = st.columns(2)
         fr3c1, fr3c2 = st.columns(2)
         fr4c1, fr4c2 = st.columns(2)
         fr5c1, fr5c2 = st.columns(2)
 
-        ft_cliente = fr1c1.multiselect('CLIENTE', df2['CLIENTE'].unique())
-        ft_equip = fr1c2.multiselect('EQUIPAMENTO', df2['EQUIPAMENTO'].unique())
+        ft_equip = fr1c1.multiselect('EQUIPAMENTO', df2['EQUIPAMENTO'].unique())
 
         ft_os = fr2c1.multiselect('NUM OS', df['NUM OS'].unique())
         ft_ns = fr2c2.multiselect('SERIAL', df['SERIAL'].unique())
@@ -393,8 +387,6 @@ else:
         ft_dtsfila_max = fr5c2.date_input('  ', value=max(df['SAÍDA FILA']), format='DD/MM/YYYY')
 
         if st.button('APLICAR FILTROS', use_container_width=True):
-            if ft_cliente:
-                df = df[df['CLIENTE'].isin(ft_cliente)]
             if ft_equip:
                 df = df[df['EQUIPAMENTO'].isin(ft_equip)]
             if ft_os:
@@ -413,8 +405,6 @@ else:
             st.session_state['df_saidas_os_interna'] = create_df_saidas_os_interna(df)
             df_scr = create_df_saidas_os_interna_resumido(st.session_state['df_saidas_os_interna'])
 
-            if ft_cliente:
-                df_scr = df_scr[df_scr['CLIENTE'].isin(ft_cliente)]
             if ft_equip:
                 df_scr = df_scr[df_scr['EQUIPAMENTO'].isin(ft_equip)]
 
@@ -434,13 +424,13 @@ else:
 
     tabs_saldo, tabs_saida, tabs_geral = st.tabs(['Saldo', 'Saídas', 'Tabela Geral'])
 
-    tabs_saldo.title('Saldo de os_interna')
+    tabs_saldo.title("Saldo de OS's Internas")
     r0c1, r0c2, r0c3, r0c4 = tabs_saldo.columns(4)
     tabs_saldo.write('')
     r1c1, r1c2 = tabs_saldo.columns(2, gap='large')
     r2c1, r2c2 = tabs_saldo.columns([0.7, 0.3], gap='large')
     tabs_saldo.write('')
-    r3c1, r3c2 = tabs_saldo.columns(2, gap='large')
+    r3c1 = tabs_saldo.container()
 
     if 'df_saldo_atual_os_interna' not in st.session_state or 'df_saldo_atual_os_interna_resumido' not in st.session_state:
         st.session_state['df_saldo_atual_os_interna'] = create_df_saldo_os_interna(historico_fila)
@@ -454,15 +444,15 @@ else:
 
     r1c1.write('Resumo de saldo de equipamentos.')
     saldo_atual_os_interna = r1c1.dataframe(
-        df_saldo_atual_os_interna_resumido[['CLIENTE', 'EQUIPAMENTO', 'QUANTIDADE']],
+        df_saldo_atual_os_interna_resumido[['NUM OS', 'EQUIPAMENTO', 'QUANTIDADE']],
         hide_index=True,
         use_container_width=True,
         on_select='rerun',
         column_config={'SERIAL':st.column_config.NumberColumn('QUANTIDADE')})
     
     if saldo_atual_os_interna.selection.rows:
-        df_saldo_atual_os_interna_resumido['CONCATENADO'] = df_saldo_atual_os_interna_resumido['CLIENTE'] + df_saldo_atual_os_interna_resumido['EQUIPAMENTO']
-        df_saldo_atual_os_interna['CONCATENADO'] = df_saldo_atual_os_interna['CLIENTE'] + df_saldo_atual_os_interna['EQUIPAMENTO']
+        df_saldo_atual_os_interna_resumido['CONCATENADO'] = df_saldo_atual_os_interna_resumido['NUM OS'] + df_saldo_atual_os_interna_resumido['EQUIPAMENTO']
+        df_saldo_atual_os_interna['CONCATENADO'] = df_saldo_atual_os_interna['NUM OS'] + df_saldo_atual_os_interna['EQUIPAMENTO']
         filtro_saldo = list(df_saldo_atual_os_interna_resumido.iloc[saldo_atual_os_interna.selection.rows]['CONCATENADO'])
         saldo_atual_os_interna_selecao = df_saldo_atual_os_interna[df_saldo_atual_os_interna['CONCATENADO'].isin(filtro_saldo)]
         st.session_state['saldo_atual_os_interna_selecao'] = saldo_atual_os_interna_selecao
@@ -497,8 +487,8 @@ else:
             r2c2.write('Status dos equipamentos em relação a entrega do SLA.')
             r2c2.plotly_chart(create_fig_status(st.session_state['saldo_atual_os_interna_selecao']))
 
-            r3c2.write('Maiores volumetrias em fila.')
-            r3c2.plotly_chart(create_fig_volume_fila(saldo_atual_os_interna.selection.rows))
+            r3c1.write('Maiores volumetrias em fila.')
+            r3c1.plotly_chart(create_fig_volume_fila(saldo_atual_os_interna.selection.rows))
 
     tabs_saida.title('Saída de Equipamentos')
     t2r0c1, t2r0c2, t2r0c3, t2r0c4 = tabs_saida.columns(4)
@@ -519,14 +509,14 @@ else:
         df_saidas_os_interna_resumido = st.session_state['df_saidas_os_interna_resumido']
 
     t2r1c1.write('Resumo de equipamentos enviados ao laboratório.')
-    saidas_os_interna = t2r1c1.dataframe(df_saidas_os_interna_resumido[['CLIENTE', 'EQUIPAMENTO', 'QUANTIDADE']],
+    saidas_os_interna = t2r1c1.dataframe(df_saidas_os_interna_resumido[['NUM OS', 'EQUIPAMENTO', 'QUANTIDADE']],
                       hide_index=True,
                       use_container_width=True,
                       on_select='rerun')
     
     if saidas_os_interna.selection.rows:
-        df_saidas_os_interna_resumido['CONCATENADO'] = df_saidas_os_interna_resumido['CLIENTE'] + df_saidas_os_interna_resumido['EQUIPAMENTO']
-        df_saidas_os_interna['CONCATENADO'] = df_saidas_os_interna['CLIENTE'] + df_saidas_os_interna['EQUIPAMENTO']
+        df_saidas_os_interna_resumido['CONCATENADO'] = df_saidas_os_interna_resumido['NUM OS'] + df_saidas_os_interna_resumido['EQUIPAMENTO']
+        df_saidas_os_interna['CONCATENADO'] = df_saidas_os_interna['NUM OS'] + df_saidas_os_interna['EQUIPAMENTO']
         filtro_saldo = list(df_saidas_os_interna_resumido.iloc[saidas_os_interna.selection.rows]['CONCATENADO'])
         saidas_os_interna_selecao = df_saidas_os_interna[df_saidas_os_interna['CONCATENADO'].isin(filtro_saldo)]
         st.session_state['saidas_os_interna_selecao'] = saidas_os_interna_selecao
