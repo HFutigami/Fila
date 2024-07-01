@@ -703,15 +703,19 @@ else:
                             delta='{:.2%}'.format(((len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])) - len(saidas_varejo_selecao[filtro_ontem])) / len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])))
             except:
                 t3r0c2.metric('Saídas do dia (seleção)', '{:,}'.format(len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()])).replace(',','.'),
-                            delta='{:.2%}'.format(1))
+                            delta='{:.2%}'.format(0))
         else: t3r0c2.metric('Saídas do dia (seleção)', 0)
     else:
         t3r0c1.metric('Total de saídas', '{:,}'.format(sum(df_saidas_varejo_resumido['QUANTIDADE'])).replace(',','.'))
         if len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()]) > 0:
             filtro_ontem = ((df_saidas_varejo['SAÍDA FILA'] >= datetime.today()-timedelta(days=1, hours=datetime.today().hour, minutes=datetime.today().minute)) &
-                            (df_saidas_varejo['SAÍDA FILA'] <= datetime.today()-timedelta(hours=datetime.today().hour, minutes=datetime.today().minute)))
-            t3r0c2.metric('Saídas do dia', '{:,}'.format(len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()])).replace(',','.'),
-                        delta='{:.2%}'.format(((len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()])) - len(df_saidas_varejo[filtro_ontem])) / len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()])))
+                            (df_saidas_varejo['SAÍDA FILA'] <= datetime.today()-timedelta(hours=datetime.today().hour, minutes=datetime.today().minute)))]
+            try:
+                t3r0c2.metric('Saídas do dia', '{:,}'.format(len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()])).replace(',','.'),
+                            delta='{:.2%}'.format(((len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()])) - len(df_saidas_varejo[filtro_ontem])) / len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()])))
+            except:
+                t3r0c2.metric('Saídas do dia', '{:,}'.format(len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()])).replace(',','.'),
+                            delta='{:.2%}'.format(0))
         else: t3r0c2.metric('Saídas do dia', 0)
 
     if t3r0c4.button('FILTROS DE SAÍDA', use_container_width=True):
