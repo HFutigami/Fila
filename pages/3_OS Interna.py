@@ -467,20 +467,10 @@ else:
         saldo_atual_os_interna_selecao = df_saldo_atual_os_interna[df_saldo_atual_os_interna['CONCATENADO'].isin(filtro_saldo)]
         st.session_state['saldo_atual_os_interna_selecao'] = saldo_atual_os_interna_selecao
         r0c1.metric('Total de equipamentos (seleção)',
-                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido.iloc[saldo_atual_os_interna.selection.rows]['QUANTIDADE']) + 
-                    sum(df_saldo_atual_os_interna_resumido.iloc[saldo_atual_os_interna.selection.rows]['QTD OS'])).replace(',', '.'))
-        r0c2.metric('Equipamentos aguardando OS (seleção)',
-                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido.iloc[saldo_atual_os_interna.selection.rows]['QTD OS'])).replace(',', '.'))
-        r0c3.metric('Equipamentos em fila (seleção)',
-                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido.iloc[saldo_atual_os_interna.selection.rows]['QUANTIDADE'])).replace(',', '.'))
+                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido.iloc[saldo_atual_os_interna.selection.rows]['QUANTIDADE']))
     else:
         r0c1.metric('Total de equipamentos',
-                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido['QUANTIDADE']) +
-                    sum(df_saldo_atual_os_interna_resumido['QTD OS'])).replace(',', '.'))
-        r0c2.metric('Equipamentos aguardando OS',
-                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido['QTD OS'])).replace(',', '.'))
-        r0c3.metric('Equipamentos em fila',
-                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido['QUANTIDADE'])).replace(',', '.'))
+                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido['QUANTIDADE']))
         
     if r0c4.button('FILTROS DE SALDO', use_container_width=True):
         open_dialog_filtros_saldo()
