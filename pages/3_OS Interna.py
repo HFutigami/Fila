@@ -467,10 +467,10 @@ else:
         saldo_atual_os_interna_selecao = df_saldo_atual_os_interna[df_saldo_atual_os_interna['CONCATENADO'].isin(filtro_saldo)]
         st.session_state['saldo_atual_os_interna_selecao'] = saldo_atual_os_interna_selecao
         r0c1.metric('Total de equipamentos (seleção)',
-                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido.iloc[saldo_atual_os_interna.selection.rows]['QUANTIDADE']))
+                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido.iloc[saldo_atual_os_interna.selection.rows]['QUANTIDADE'])))
     else:
         r0c1.metric('Total de equipamentos',
-                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido['QUANTIDADE']))
+                    '{:,}'.format(sum(df_saldo_atual_os_interna_resumido['QUANTIDADE'])))
         
     if r0c4.button('FILTROS DE SALDO', use_container_width=True):
         open_dialog_filtros_saldo()
