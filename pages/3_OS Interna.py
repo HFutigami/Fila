@@ -454,7 +454,7 @@ else:
 
     r1c1.write('Resumo de saldo de equipamentos.')
     saldo_atual_os_interna = r1c1.dataframe(
-        df_saldo_atual_os_interna_resumido[['CLIENTE', 'EQUIPAMENTO', 'QTD OS', 'QUANTIDADE']],
+        df_saldo_atual_os_interna_resumido[['CLIENTE', 'EQUIPAMENTO', 'QUANTIDADE']],
         hide_index=True,
         use_container_width=True,
         on_select='rerun',
