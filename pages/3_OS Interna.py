@@ -301,30 +301,6 @@ else:
                           yaxis_visible=False)
 
         return fig
-    
-
-    def create_fig_volume_os(rows):
-        df = df_saldo_atual_os_interna_resumido.iloc[rows][['CLIENTE',
-                                                           'EQUIPAMENTO',
-                                                           'QTD OS']].groupby(
-                                                                ['CLIENTE'])['QTD OS'].sum(
-                                                           ).reset_index().sort_values(['QTD OS'], ascending=False).head(5)
-
-        fig = px.bar(df,
-                     x='CLIENTE',
-                     y='QTD OS',
-                     color_discrete_sequence=['#E8C406'],
-                     orientation='v',
-                     text='QTD OS')
-        
-        fig.update_traces(textposition='inside',
-                          orientation='v')
-      
-        fig.update_layout(yaxis_title=None,
-                          xaxis_title=None,
-                          yaxis_visible=False)
-        
-        return fig
 
 
     @st.experimental_dialog("Filtros de Saldo", width='large')
@@ -533,10 +509,6 @@ else:
 
             r3c2.write('Maiores volumetrias em fila.')
             r3c2.plotly_chart(create_fig_volume_fila(saldo_atual_os_interna.selection.rows))
-
-        if sum(df_saldo_atual_os_interna_resumido.iloc[saldo_atual_os_interna.selection.rows]['QTD OS']) > 0: 
-            r3c1.write('Maiores volumetrias aguardando abertura de OS.')
-            r3c1.plotly_chart(create_fig_volume_os(saldo_atual_os_interna.selection.rows))
 
     tabs_saida.title('Saída de Equipamentos')
     t2r0c1, t2r0c2, t2r0c3, t2r0c4 = tabs_saida.columns(4)
