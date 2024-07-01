@@ -175,8 +175,6 @@ else:
         
         df_saldo_atual_os_interna_resumido.loc[df_saldo_atual_os_interna_resumido['SERIAL'].isna(), 'SERIAL'] = 0
         df_saldo_atual_os_interna_resumido.SERIAL = df_saldo_atual_os_interna_resumido.SERIAL.astype(int)
-        df_saldo_atual_os_interna_resumido.loc[df_saldo_atual_os_interna_resumido['ABRIR O.S'].isna(), 'ABRIR O.S'] = 0
-        df_saldo_atual_os_interna_resumido['ABRIR O.S'] = df_saldo_atual_os_interna_resumido['ABRIR O.S'].astype(int)
         df_saldo_atual_os_interna_resumido.rename(columns={'SERIAL':'QUANTIDADE'}, inplace=True)
         df_saldo_atual_os_interna_resumido = df_saldo_atual_os_interna_resumido[['CLIENTE', 'EQUIPAMENTO', 'QUANTIDADE']]
         try:
