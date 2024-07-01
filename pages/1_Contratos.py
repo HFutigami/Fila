@@ -624,7 +624,7 @@ else:
                             delta='{:.2%}'.format(((len(df_saidas_contratos[df_saidas_contratos['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)])) - len(df_saidas_contratos[filtro_ontem])) / len(df_saidas_contratos[filtro_ontem])))
             except:
                 t2r0c2.metric('Saídas do dia', '{:,}'.format(len(df_saidas_contratos[df_saidas_contratos['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)])).replace(',','.'),
-                            delta='{:.2%}'.format(1))
+                            delta='{:.2%}'.format(0))
         else: t2r0c2.metric('Saídas do dia', 0)
 
     if t2r0c4.button('FILTROS DE SAÍDA', use_container_width=True):
