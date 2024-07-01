@@ -710,7 +710,6 @@ else:
         if len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()]) > 0:
             filtro_ontem = ((df_saidas_varejo['SAÍDA FILA'] >= datetime.today()-timedelta(days=1, hours=datetime.today().hour, minutes=datetime.today().minute)) &
                             (df_saidas_varejo['SAÍDA FILA'] <= datetime.today()-timedelta(hours=datetime.today().hour, minutes=datetime.today().minute)))
-            st.dataframe(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)])
             try:
                 t3r0c2.metric('Saídas do dia', '{:,}'.format(len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)])).replace(',','.'),
                             delta='{:.2%}'.format(((len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()])) - len(df_saidas_varejo[filtro_ontem])) / len(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()])))
@@ -741,4 +740,5 @@ else:
         t3r3c1.write('Distribuição do status dos equipamentos entregues ao longo dos meses.')
         t3r3c1.plotly_chart(create_fig_status_saidas())
 
+    st.dataframe(df_saidas_varejo[df_saidas_varejo['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)])
     tabs_geral.dataframe(st.session_state['historico_fila'][~st.session_state['historico_fila']['FLUXO'].isin(['CONTRATO', 'OS INTERNA'])])
