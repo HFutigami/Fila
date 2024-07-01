@@ -695,7 +695,7 @@ else:
         st.session_state['saidas_varejo_selecao'] = saidas_varejo_selecao
 
         t3r0c1.metric('Total de saídas (seleção)', '{:,}'.format(len(saidas_varejo_selecao['SERIAL'])).replace(',','.'))
-        if len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()]) > 0:
+        if len(saidas_varejo_selecao[saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()-timedelta(hours=datetime.today().hour+1)]) > 0:
             filtro_ontem = ((saidas_varejo_selecao['SAÍDA FILA'] >= datetime.today()-timedelta(days=1, hours=datetime.today().hour, minutes=datetime.today().minute)) &
                             (saidas_varejo_selecao['SAÍDA FILA'] <= datetime.today()-timedelta(hours=datetime.today().hour, minutes=datetime.today().minute)))
             try:
