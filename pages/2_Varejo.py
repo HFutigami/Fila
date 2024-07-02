@@ -170,8 +170,10 @@ else:
     
 
     def create_df_saldo_varejo_resumido(df):
-
-        df_saldo_atual_varejo_resumido = df.groupby(['CLIENTE', 'EQUIPAMENTO'])[['SERIAL']].count().reset_index()
+        
+        df_saldo_atual_varejo_resumido = df.copy()
+        df_saldo_atual_varejo_resumido = df_saldo_atual_varejo_resumido.sort_values(['ENTRADA FILA']).drop_duplicates(['SERIAL', 'CLIENTE', 'NUM OS'], keep='last')
+        df_saldo_atual_varejo_resumido = df_saldo_atual_varejo_resumido.groupby(['CLIENTE', 'EQUIPAMENTO'])[['SERIAL']].count().reset_index()
         df_saldo_atual_varejo_resumido.rename(columns={'SERIAL':'QUANTIDADE'}, inplace=True)
         df_saldo_atual_varejo_resumido = df_saldo_atual_varejo_resumido[['CLIENTE', 'EQUIPAMENTO', 'QUANTIDADE']]
         try:
