@@ -353,6 +353,8 @@ else:
 
         df.loc[df['EQUIPAMENTO'].str.contains('PPC930'), 'EQUIPAMENTO'] = 'PPC930'
 
+        st.dataframe(df)
+        
         df = df.groupby(['CLIENTE', 'EQUIPAMENTO'])[['QTD OS', 'QTD FILA']].sum().reset_index()
 
         html_contratos = df[['CLIENTE', 'EQUIPAMENTO', 'QTD OS', 'QTD FILA']].to_html(index=False, index_names=False, justify='left', na_rep='')
