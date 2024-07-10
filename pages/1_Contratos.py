@@ -467,7 +467,7 @@ else:
 
             df = df[(df['ENTRADA GERFLOOR'] >= pd.to_datetime(ft_dtger_min)) & (df['ENTRADA GERFLOOR'] <= pd.to_datetime(ft_dtger_max))]
             df = df[(df['ENTRADA FILA'] >= pd.to_datetime(ft_dtfila_min)) & (df['ENTRADA FILA'] <= pd.to_datetime(ft_dtfila_max))]
-            df = df[((df['SAÍDA FILA'] >= pd.to_datetime(ft_dtsfila_min)) & (df['SAÍDA FILA'] <= pd.to_datetime(ft_dtsfila_max))) or (df['SAÍDA FILA'].isna())]
+            df = df[((df['SAÍDA FILA'] >= pd.to_datetime(ft_dtsfila_min)) & (df['SAÍDA FILA'] <= pd.to_datetime(ft_dtsfila_max))) | (df['ENDEREÇO'] != 'LAB')]
 
             st.session_state['df_saidas_contratos'] = create_df_saidas_contratos(df)
             df_scr = create_df_saidas_contratos_resumido(st.session_state['df_saidas_contratos'])
