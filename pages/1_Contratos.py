@@ -479,7 +479,7 @@ else:
             if ft_equip:
                 df_scr = df_scr[df_scr['EQUIPAMENTO'].isin(ft_equip)]
 
-            st.session_state['df_saldo_atual_contratos_resumido'] = df_scr
+            st.session_state['df_saida_contratos_resumido'] = df_scr
 
             st.rerun()
 
