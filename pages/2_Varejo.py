@@ -115,8 +115,10 @@ else:
                                     'PAGSEGURO_OSASCO',
                                     'COBRA_BRASILIA',
                                     'MOOZ']
+        lista_clientes_varejo = ['MARSISTEM']
         historico_fila.loc[historico_fila['CLIENTE'].isin(lista_clientes_contrato), 'FLUXO'] = '000001'
         historico_fila.loc[historico_fila['CLIENTE'] == 'GERTEC', 'FLUXO'] = '000004'
+        historico_fila.loc[historico_fila['CLIENTE'].isin(lista_clientes_varejo), 'FLUXO'] = '000002'
         historico_fila.loc[historico_fila['FLUXO'] == 'NÃO DEFINIDO', 'FLUXO'] = '000002'
         historico_fila['FLUXO'] = historico_fila['FLUXO'].str.replace('000001', 'CONTRATO')
         historico_fila['FLUXO'] = historico_fila['FLUXO'].str.replace('000002', 'VAREJO')
