@@ -125,8 +125,8 @@ else:
         historico_fila['FLUXO'] = historico_fila['FLUXO'].str.replace('000003', 'VAREJO')
         historico_fila['FLUXO'] = historico_fila['FLUXO'].str.replace('000004', 'OS INTERNA')
 
-        filtro_3m = ((historico_fila['SAÍDA FILA'] >= datetime.today()-timedelta(month=3, hours=datetime.today().hour, minutes=datetime.today().minute)) &
-                    ((historico_fila['SAÍDA FILA'] <= datetime.today()-timedelta(hours=datetime.today().hour+1, minutes=datetime.today().minute))
+        filtro_3m = (historico_fila['SAÍDA FILA'] >= datetime.today()-timedelta(month=3, hours=datetime.today().hour, minutes=datetime.today().minute)) &
+                    (historico_fila['SAÍDA FILA'] <= datetime.today()-timedelta(hours=datetime.today().hour+1, minutes=datetime.today().minute))
 
         historico_fila = historico_fila[(filtro_3m) | (historico_fila['SAÍDA FILA'].isna())]
                      
