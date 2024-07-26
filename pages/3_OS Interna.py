@@ -149,6 +149,11 @@ else:
         historico_fila['AGING TOTAL'] = historico_fila['AGING TOTAL'].astype('int')
         historico_fila['AGING FILA'] = historico_fila.apply(lambda row: calendario.get_working_days_delta(row['ENTRADA FILA'], row['ULTIMA DATA']), axis=1) + 1
         historico_fila['AGING FILA'] = historico_fila['AGING FILA'].astype('int')
+
+        historico_fila.loc[historico_fila['NUM OS'] == '1377372024', 'AGING TOTAL'] = historico_fila.loc[historico_fila['NUM OS'] == '1377372024', 'AGING TOTAL'] + 25
+        historico_fila.loc[historico_fila['NUM OS'] == '1381232024', 'AGING TOTAL'] = historico_fila.loc[historico_fila['NUM OS'] == '1381232024', 'AGING TOTAL'] + 34
+        historico_fila.loc[historico_fila['NUM OS'] == '1382012024', 'AGING TOTAL'] = historico_fila.loc[historico_fila['NUM OS'] == '1382012024', 'AGING TOTAL'] + 35
+        historico_fila.loc[historico_fila['NUM OS'] == '1383182024', 'AGING TOTAL'] = historico_fila.loc[historico_fila['NUM OS'] == '1383182024', 'AGING TOTAL'] + 39
         
         historico_fila = historico_fila.join(sla_contratos, on=['CLIENTE', 'FLUXO'], how='left')
         historico_fila.loc[historico_fila['PRAZO'].isna(), 'PRAZO'] = 30
