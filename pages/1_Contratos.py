@@ -193,7 +193,7 @@ else:
  
         df.loc[df['CLIENTE'].str.startswith('COBRA'), 'CLIENTE'] = 'COBRA'
         df.loc[df['CLIENTE'].str.startswith('BB'), 'CLIENTE'] = 'COBRA'
-        df.loc[df['CLIENTE'].str.startswith('SAFRA'), 'CLIENTE'] = 'BANCO SAFRA S A'
+        df.loc[df['CLIENTE'].str.startswith('BANCO SAFRA S A'), 'CLIENTE'] = 'SAFRA'
 
         df_saldo_atual_contratos_resumido = df.groupby(['CLIENTE', 'EQUIPAMENTO'])[['SERIAL']].count().reset_index()
         
@@ -363,7 +363,7 @@ else:
         df.loc[df['CLIENTE'].str.startswith('COBRA'), 'CLIENTE'] = 'COBRA'
         df.loc[df['CLIENTE'].str.startswith('BB'), 'CLIENTE'] = 'COBRA'
         df.loc[df['CLIENTE'].str.startswith('MERCADO'), 'CLIENTE'] = 'MERCADO PAGO'
-        df.loc[df['CLIENTE'].str.startswith('SAFRA'), 'CLIENTE'] = 'BANCO SAFRA S A'
+        df.loc[df['CLIENTE'].str.startswith('BANCO SAFRA S A'), 'CLIENTE'] = 'SAFRA'
 
         df.loc[df['EQUIPAMENTO'].str.contains('PPC930'), 'EQUIPAMENTO'] = 'PPC930'
         
