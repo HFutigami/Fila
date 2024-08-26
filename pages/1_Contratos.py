@@ -79,56 +79,10 @@ else:
         # Saldo geral
         historico_fila = df_sharep(saldo_fila_url)
 
-        lista_clientes_contrato = ['REDE',
-                                    'Stone',
-                                    'Wyntech',
-                                    'Getnet',
-                                    'MERCADOPAGO.COM',
-                                    'CIELO',
-                                    'Procomp',
-                                    'NCR',
-                                    'COBRA_JOAO PESSOA',
-                                    'COBRA_GOIANIA',
-                                    'COBRA',
-                                    'COBRA_PORTO VELHO',
-                                    'COBRA_TERESINA',
-                                    'FD',
-                                    'COBRA_RIO DE JANEIRO_2',
-                                    'COBRA_BAURU',
-                                    'COBRA_CURITIBA',
-                                    'COBRA_RIBEIRAO PRETO',
-                                    'BB_CAMPINAS',
-                                    'COBRA_FLORIANOPOLIS',
-                                    'COBRA_BELEM',
-                                    'COBRA_JOINVILLE',
-                                    'COBRA_LONDRINA',
-                                    'COBRA_BARUERI',
-                                    'BB',
-                                    'COBRA_JABOATAO DOS GUARARAPES',
-                                    'MARTINS',
-                                    'Paygo',
-                                    'ALEXANDRE',
-                                    'MERCADO PAGO',
-                                    'SERVICO',
-                                    'COBRA_SAO LUIS',
-                                    'COBRA_PORTO ALEGRE',
-                                    'PAGSEGURO_OSASCO',
-                                    'COBRA_BRASILIA',
-                                    'MOOZ']
-        lista_clientes_varejo = ['MARSISTEM']
-        historico_fila.loc[historico_fila['CLIENTE'].isin(lista_clientes_contrato), 'FLUXO'] = '000001'
-        historico_fila.loc[historico_fila['CLIENTE'] == 'GERTEC', 'FLUXO'] = '000004'
-        historico_fila.loc[historico_fila['CLIENTE'].isin(lista_clientes_varejo), 'FLUXO'] = '000002'
-        historico_fila.loc[historico_fila['FLUXO'] == 'NÃO DEFINIDO', 'FLUXO'] = '000002'
         historico_fila['FLUXO'] = historico_fila['FLUXO'].str.replace('000001', 'CONTRATO')
         historico_fila['FLUXO'] = historico_fila['FLUXO'].str.replace('000002', 'VAREJO')
         historico_fila['FLUXO'] = historico_fila['FLUXO'].str.replace('000003', 'VAREJO')
         historico_fila['FLUXO'] = historico_fila['FLUXO'].str.replace('000004', 'OS INTERNA')
-
-        #filtro_3m = ((historico_fila['SAÍDA FILA'] >= datetime.today()-timedelta(month=3, hours=datetime.today().hour, minutes=datetime.today().minute)) &
-        #             (historico_fila['SAÍDA FILA'] <= datetime.today()-timedelta(hours=datetime.today().hour+1, minutes=datetime.today().minute)))
-
-        # historico_fila = historico_fila[(filtro_3m) | (historico_fila['SAÍDA FILA'].isna())]
                      
         historico_fila['GARANTIA'] = historico_fila['GARANTIA'].str.upper()
         historico_fila['CLIENTE'] = historico_fila['CLIENTE'].str.upper()
@@ -154,11 +108,6 @@ else:
         historico_fila['AGING TOTAL'] = historico_fila['AGING TOTAL'].astype('int')
         historico_fila['AGING FILA'] = historico_fila.apply(lambda row: calendario.get_working_days_delta(row['ENTRADA FILA'], row['ULTIMA DATA']), axis=1) + 1
         historico_fila['AGING FILA'] = historico_fila['AGING FILA'].astype('int')
-
-        historico_fila.loc[historico_fila['NUM OS'] == '1377372024', 'AGING TOTAL'] = historico_fila.loc[historico_fila['NUM OS'] == '1377372024', 'AGING TOTAL'] + 25
-        historico_fila.loc[historico_fila['NUM OS'] == '1381232024', 'AGING TOTAL'] = historico_fila.loc[historico_fila['NUM OS'] == '1381232024', 'AGING TOTAL'] + 34
-        historico_fila.loc[historico_fila['NUM OS'] == '1382012024', 'AGING TOTAL'] = historico_fila.loc[historico_fila['NUM OS'] == '1382012024', 'AGING TOTAL'] + 35
-        historico_fila.loc[historico_fila['NUM OS'] == '1383182024', 'AGING TOTAL'] = historico_fila.loc[historico_fila['NUM OS'] == '1383182024', 'AGING TOTAL'] + 39
         
         historico_fila = historico_fila.join(sla_contratos, on=['CLIENTE', 'FLUXO'], how='left')
         historico_fila.loc[historico_fila['PRAZO'].isna(), 'PRAZO'] = 30
