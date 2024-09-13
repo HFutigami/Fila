@@ -200,7 +200,7 @@ else:
 
     def create_df_terceiros_contratos(df):
         df_saldo_atual_contratos = df.copy()
-        df_saldo_atual_contratos.print()
+        print(df_saldo_atual_contratos)
         df_saldo_atual_contratos = df_saldo_atual_contratos[
             (df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (df_saldo_atual_contratos['ENDEREÇO'].isin(['EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']))]
         df.rename(columns={'ENDEREÇO':'TERCEIROS'}, inplace=True)
