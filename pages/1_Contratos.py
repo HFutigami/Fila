@@ -199,6 +199,7 @@ else:
 
 
     def create_df_terceiros_contratos(df):
+        st.dataframe(historico_fila)
         df_saldo_atual_contratos = df.copy()
         df_saldo_atual_contratos = df_saldo_atual_contratos[
             (df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (df_saldo_atual_contratos['ENDEREÇO'].isin(['EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']))]
