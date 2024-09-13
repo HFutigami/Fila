@@ -705,7 +705,7 @@ else:
     t3r0c1, t3r0c2, t3r0c3, t3r0c4 = tabs_terceiros.columns(4)
     tabs_terceiros.write('')
     t3r1c1, t3r1c2 = tabs_terceiros.columns(2, gap='large')
-    t3r2c1, t3r2c2 = tabs_terceiros.container([6, 4], gap='large')
+    t3r2c1, t3r2c2 = tabs_terceiros.columns([6, 4], gap='large')
 
     if 'df_terceiros_contratos' not in st.session_state or 'df_terceiros_contratos_resumido' not in st.session_state:
         st.session_state['df_terceiros_contratos'] = create_df_terceiros_contratos(historico_fila)
