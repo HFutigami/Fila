@@ -765,8 +765,8 @@ else:
         t3r1c2.plotly_chart(create_fig_criticos(st.session_state['terceiros_contratos_selecao'][
             ~st.session_state['terceiros_contratos_selecao']['% DO SLA'].isna()].copy()))
 
-        t3r1c2.write('Status dos equipamentos em relação ao SLA.')
-        t3r1c2.plotly_chart(create_fig_status(st.session_state['terceiros_contratos_selecao']))
+        t3r2c2.write('Status dos equipamentos em relação ao SLA.')
+        t3r2c2.plotly_chart(create_fig_status(st.session_state['terceiros_contratos_selecao']))
 
         t3r2c1.write('Histórico detalhado de equipamentos entregues ao laboratório.')
         t3r2c1.dataframe(st.session_state['terceiros_contratos_selecao'][['CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
