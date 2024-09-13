@@ -717,7 +717,7 @@ else:
         df_terceiros_contratos = st.session_state['df_terceiros_contratos']
         df_terceiros_contratos_resumido = st.session_state['df_terceiros_contratos_resumido']
 
-    t2r1c1.write('Resumo de equipamentos entregues a outros setores.')
+    t3r1c1.write('Resumo de equipamentos entregues a outros setores.')
     terceiros_contratos = t2r1c1.dataframe(df_terceiros_contratos_resumido[['TERCEIROS', 'QUANTIDADE']],
                                         hide_index=True,
                                         use_container_width=True,
@@ -728,10 +728,10 @@ else:
         terceiros_contratos_selecao = df_terceiros_contratos[df_terceiros_contratos['TERCEIROS'].isin(filtro_saldo)]
         st.session_state['terceiros_contratos_selecao'] = terceiros_contratos_selecao
 
-        t2r0c1.metric('Total em posse de terceiros (seleção)',
+        t3r0c1.metric('Total em posse de terceiros (seleção)',
                       '{:,}'.format(len(terceiros_contratos_selecao['SERIAL'])).replace(',', '.'))
     else:
-        t2r0c1.metric('Total em posse de terceiros',
+        t3r0c1.metric('Total em posse de terceiros',
                       '{:,}'.format(sum(df_terceiros_contratos_resumido['QUANTIDADE'])).replace(',', '.'))
 
 
@@ -740,11 +740,11 @@ else:
         t3r1c2.plotly_chart(create_fig_criticos(st.session_state['terceiros_contratos_selecao'][
             ~st.session_state['terceiros_contratos_selecao']['% DO SLA'].isna()].copy()))
 
-        t2r1c2.write('Status dos equipamentos em relação ao SLA.')
-        t2r1c2.plotly_chart(create_fig_status(st.session_state['terceiros_contratos_selecao']))
+        t3r1c2.write('Status dos equipamentos em relação ao SLA.')
+        t3r1c2.plotly_chart(create_fig_status(st.session_state['terceiros_contratos_selecao']))
 
-        t2r2c1.write('Histórico detalhado de equipamentos entregues ao laboratório.')
-        t2r2c1.dataframe(st.session_state['terceiros_contratos_selecao'][['CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
+        t3r2c1.write('Histórico detalhado de equipamentos entregues ao laboratório.')
+        t3r2c1.dataframe(st.session_state['terceiros_contratos_selecao'][['CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
                                                                        'NUM OS', 'ENTRADA GERFLOOR', 'ENTRADA FILA',
                                                                        'SAÍDA FILA', 'AGING TOTAL', 'AGING FILA',
                                                                        'STATUS']].sort_values(['SAÍDA FILA']),
