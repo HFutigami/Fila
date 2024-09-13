@@ -223,25 +223,48 @@ else:
         df['CAIXA'] = df['CAIXA'].astype('str')
         df['CAIXA'] = "ㅤ" + df['CAIXA']
         df['ENTRADA FILA'] = df['ENTRADA FILA'].astype('str')
-        df['RÓTULO'] = df['CLIENTE'] + ' - ' + df['ENDEREÇO'] + ' - ' + \
-                       df['ENTRADA FILA'].str.replace('-', '/').str.split(" ").str[0]
-        df = df.groupby(['CAIXA', 'RÓTULO', '% DO SLA'])['SERIAL'].count().reset_index().sort_values('% DO SLA',
-                                                                                                     ascending=True).tail(
-            10)
+        try:
+            df['RÓTULO'] = df['CLIENTE'] + ' - ' + df['ENDEREÇO'] + ' - ' + \
+                           df['ENTRADA FILA'].str.replace('-', '/').str.split(" ").str[0]
 
-        fig = px.bar(df,
-                     x='% DO SLA',
-                     y='CAIXA',
-                     color='% DO SLA',
-                     orientation='h',
-                     text='RÓTULO',
-                     color_continuous_scale=[(0, "#008000"),
-                                             (0.2, "#32CD32"),
-                                             (0.45, "#FFD700"),
-                                             (0.8, "#FF8C00"),
-                                             (1, "#8B0000")],
-                     range_color=[0, 1])
+            df = df.groupby(['CAIXA', 'RÓTULO', '% DO SLA'])['SERIAL'].count().reset_index().sort_values('% DO SLA',
+                                                                                                         ascending=True).tail(
+                10)
+    
+            fig = px.bar(df,
+                         x='% DO SLA',
+                         y='CAIXA',
+                         color='% DO SLA',
+                         orientation='h',
+                         text='RÓTULO',
+                         color_continuous_scale=[(0, "#008000"),
+                                                 (0.2, "#32CD32"),
+                                                 (0.45, "#FFD700"),
+                                                 (0.8, "#FF8C00"),
+                                                 (1, "#8B0000")],
+                         range_color=[0, 1])
 
+        except:
+            df['RÓTULO'] = df['CLIENTE'] + ' - ' + df['TERCEIROS'] + ' - ' + \
+                           df['ENTRADA FILA'].str.replace('-', '/').str.split(" ").str[0]
+
+            df = df.groupby(['SERIAL', 'RÓTULO', '% DO SLA'])['CAIXA'].count().reset_index().sort_values('% DO SLA',
+                                                                                                         ascending=True).tail(
+                10)
+    
+            fig = px.bar(df,
+                         x='% DO SLA',
+                         y='SERIAL',
+                         color='% DO SLA',
+                         orientation='h',
+                         text='RÓTULO',
+                         color_continuous_scale=[(0, "#008000"),
+                                                 (0.2, "#32CD32"),
+                                                 (0.45, "#FFD700"),
+                                                 (0.8, "#FF8C00"),
+                                                 (1, "#8B0000")],
+                         range_color=[0, 1])
+        
         return fig
 
 
