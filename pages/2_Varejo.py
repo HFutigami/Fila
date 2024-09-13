@@ -585,9 +585,9 @@ else:
     if 'saldo_atual_varejo_selecao' in st.session_state and saldo_atual_varejo.selection.rows:
         if len(st.session_state['saldo_atual_varejo_selecao']) > 0:
             r1c2.write('Classificação dos equipamentos no fila de acordo com % do SLA.')
-            r1c2.plotly_chart(create_fig_criticos(create_fig_criticos(st.session_state['saldo_atual_varejo_selecao'][
+            r1c2.plotly_chart(create_fig_criticos(st.session_state['saldo_atual_varejo_selecao'][
                                                       ~st.session_state['saldo_atual_varejo_selecao'][
-                                                          '% DO SLA'].isna()].copy())))
+                                                          '% DO SLA'].isna()].copy()))
 
             r2c1.write('Saldo detalhado de equipamentos no fila.')
             r2c1.dataframe(saldo_atual_varejo_selecao[[
