@@ -218,27 +218,76 @@ else:
         return df
 
 
-    def create_fig_criticos():
-        df = st.session_state['saldo_atual_varejo_selecao'][~st.session_state['saldo_atual_varejo_selecao']['% DO SLA'].isna()].copy()
+    def create_df_terceiros_contratos(df):
+        df_saldo_atual_contratos = df.copy()
+        df_saldo_atual_contratos = df_saldo_atual_contratos[
+            (df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (df_saldo_atual_contratos['ENDEREÇO'].isin(
+                ['EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']))]
+        df_saldo_atual_contratos.rename(columns={'ENDEREÇO': 'TERCEIROS'}, inplace=True)
+
+        return df_saldo_atual_contratos
+
+
+    def create_df_terceiros_contratos_resumido(df):
+
+        df = df.groupby(['TERCEIROS'])[['SERIAL']].count().reset_index()
+        df = df.rename(columns={'SERIAL': 'QUANTIDADE'})
+        try:
+            df = df.sort_values([['TERCEIROS', 'EQUIPAMENTO']])
+        except:
+            pass
+
+        return df
+
+
+    def create_fig_criticos(df):
         df['CAIXA'] = df['CAIXA'].astype('str')
         df['CAIXA'] = "ㅤ" + df['CAIXA']
+        df['SERIAL'] = df['SERIAL'].astype('str')
+        df['SERIAL'] = "ㅤ" + df['SERIAL']
         df['ENTRADA FILA'] = df['ENTRADA FILA'].astype('str')
-        df['RÓTULO'] = df['CLIENTE'] + ' - ' + df['ENDEREÇO'] + ' - ' + df['ENTRADA FILA'].str.replace('-','/').str.split(" ").str[0]
-        df = df.groupby(['CAIXA', 'RÓTULO', '% DO SLA'])['SERIAL'].count().reset_index().sort_values('% DO SLA', ascending=True).tail(10)
-        
-        fig = px.bar(df,
-                        x='% DO SLA',
-                        y='CAIXA',
-                        color='% DO SLA',
-                        orientation='h',
-                        text='RÓTULO',
-                        color_continuous_scale=[(0, "#008000"),
-                                                (0.2, "#32CD32"),
-                                                (0.45, "#FFD700"),
-                                                (0.8, "#FF8C00"),
-                                                (1, "#8B0000")],
-                        range_color=[0,1])
-        
+        try:
+            df['RÓTULO'] = df['CLIENTE'] + ' - ' + df['ENDEREÇO'] + ' - ' + \
+                           df['ENTRADA FILA'].str.replace('-', '/').str.split(" ").str[0]
+
+            df = df.groupby(['CAIXA', 'RÓTULO', '% DO SLA'])['SERIAL'].count().reset_index().sort_values('% DO SLA',
+                                                                                                         ascending=True).tail(
+                10)
+
+            fig = px.bar(df,
+                         x='% DO SLA',
+                         y='CAIXA',
+                         color='% DO SLA',
+                         orientation='h',
+                         text='RÓTULO',
+                         color_continuous_scale=[(0, "#008000"),
+                                                 (0.2, "#32CD32"),
+                                                 (0.45, "#FFD700"),
+                                                 (0.8, "#FF8C00"),
+                                                 (1, "#8B0000")],
+                         range_color=[0, 1])
+
+        except:
+            df['RÓTULO'] = df['CLIENTE'] + ' - ' + df['TERCEIROS'] + ' - ' + \
+                           df['ENTRADA FILA'].str.replace('-', '/').str.split(" ").str[0]
+
+            df = df.groupby(['SERIAL', 'RÓTULO', '% DO SLA'])['CAIXA'].count().reset_index().sort_values('% DO SLA',
+                                                                                                         ascending=True).tail(
+                10)
+
+            fig = px.bar(df,
+                         x='% DO SLA',
+                         y='SERIAL',
+                         color='% DO SLA',
+                         orientation='h',
+                         text='RÓTULO',
+                         color_continuous_scale=[(0, "#008000"),
+                                                 (0.2, "#32CD32"),
+                                                 (0.45, "#FFD700"),
+                                                 (0.8, "#FF8C00"),
+                                                 (1, "#8B0000")],
+                         range_color=[0, 1])
+
         return fig
 
 
@@ -536,7 +585,9 @@ else:
     if 'saldo_atual_varejo_selecao' in st.session_state and saldo_atual_varejo.selection.rows:
         if len(st.session_state['saldo_atual_varejo_selecao']) > 0:
             r1c2.write('Classificação dos equipamentos no fila de acordo com % do SLA.')
-            r1c2.plotly_chart(create_fig_criticos())
+            r1c2.plotly_chart(create_fig_criticos(create_fig_criticos(st.session_state['saldo_atual_varejo_selecao'][
+                                                      ~st.session_state['saldo_atual_varejo_selecao'][
+                                                          '% DO SLA'].isna()].copy())))
 
             r2c1.write('Saldo detalhado de equipamentos no fila.')
             r2c1.dataframe(saldo_atual_varejo_selecao[[
@@ -706,4 +757,61 @@ else:
         t3r3c1.write('Distribuição do status dos equipamentos entregues ao longo dos meses.')
         t3r3c1.plotly_chart(create_fig_status_saidas())
 
+    
+    tabs_terceiros.title('Equipamentos Retirados por Terceiros')
+    t4r0c1, t4r0c2, t4r0c3, t4r0c4 = tabs_terceiros.columns(4)
+    tabs_terceiros.write('')
+    t4r1c1, t4r1c2 = tabs_terceiros.columns(2, gap='large')
+    t4r2c1, t4r2c2 = tabs_terceiros.columns([6, 4], gap='large')
+
+    if 'df_terceiros_varejo' not in st.session_state or 'df_terceiros_varejo_resumido' not in st.session_state:
+        st.session_state['df_terceiros_varejo'] = create_df_terceiros_varejo(historico_fila)
+        st.session_state['df_terceiros_varejo_resumido'] = create_df_terceiros_varejo_resumido(
+            st.session_state['df_terceiros_varejo'])
+
+        df_terceiros_varejo = st.session_state['df_terceiros_varejo']
+        df_terceiros_varejo_resumido = st.session_state['df_terceiros_varejo_resumido']
+    else:
+        df_terceiros_varejo = st.session_state['df_terceiros_varejo']
+        df_terceiros_varejo_resumido = st.session_state['df_terceiros_varejo_resumido']
+
+    t4r1c1.write('Resumo de equipamentos entregues a outros setores.')
+    terceiros_varejo = t4r1c1.dataframe(df_terceiros_varejo_resumido[['TERCEIROS', 'QUANTIDADE']],
+                                           hide_index=True,
+                                           use_container_width=True,
+                                           on_select='rerun')
+
+    if terceiros_varejo.selection.rows:
+        filtro_saldo = list(df_terceiros_varejo_resumido.iloc[terceiros_varejo.selection.rows]['TERCEIROS'])
+        terceiros_varejo_selecao = df_terceiros_varejo[df_terceiros_varejo['TERCEIROS'].isin(filtro_saldo)]
+        st.session_state['terceiros_varejo_selecao'] = terceiros_varejo_selecao
+
+        t4r0c1.metric('Total em posse de terceiros (seleção)',
+                      '{:,}'.format(len(terceiros_varejo_selecao['SERIAL'])).replace(',', '.'))
+    else:
+        t4r0c1.metric('Total em posse de terceiros',
+                      '{:,}'.format(sum(df_terceiros_varejo_resumido['QUANTIDADE'])).replace(',', '.'))
+
+    if 'terceiros_varejo_selecao' in st.session_state and terceiros_varejo.selection.rows:
+        t4r1c2.write('Classificação dos equipamentos em posse de terceiros de acordo com % do SLA.')
+        t4r1c2.plotly_chart(create_fig_criticos(st.session_state['terceiros_varejo_selecao'][
+                                                    ~st.session_state['terceiros_varejo_selecao'][
+                                                        '% DO SLA'].isna()].copy()))
+
+        t4r2c2.write('Status dos equipamentos em relação ao SLA.')
+        t4r2c2.plotly_chart(create_fig_status(st.session_state['terceiros_varejo_selecao']))
+
+        t4r2c1.write('Histórico detalhado de equipamentos entregues ao laboratório.')
+        t4r2c1.dataframe(st.session_state['terceiros_varejo_selecao'][['CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
+                                                                          'NUM OS', 'ENTRADA GERFLOOR', 'ENTRADA FILA',
+                                                                          'SAÍDA FILA', 'AGING TOTAL', 'AGING FILA',
+                                                                          'STATUS']].sort_values(['SAÍDA FILA']),
+                         hide_index=True,
+                         use_container_width=True,
+                         column_config={
+                             'ENTRADA GERFLOOR': st.column_config.DateColumn('ENTRADA GERFLOOR', format='DD/MM/YYYY'),
+                             'ENTRADA FILA': st.column_config.DateColumn('ENTRADA FILA', format='DD/MM/YYYY HH:mm:ss'),
+                             'SAÍDA FILA': st.column_config.DateColumn('SAÍDA FILA', format='DD/MM/YYYY HH:mm:ss')
+                         })
+        
     tabs_geral.dataframe(st.session_state['historico_fila'][~st.session_state['historico_fila']['FLUXO'].isin(['CONTRATO', 'OS INTERNA'])])
