@@ -202,7 +202,7 @@ else:
         df_saldo_atual_contratos = df
         df_saldo_atual_contratos = df_saldo_atual_contratos[
             (df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (df_saldo_atual_contratos['ENDEREÇO'].isin(['EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']))]
-        df.rename(columns={'ENDEREÇO':'TERCEIROS'})
+        df.rename(columns={'ENDEREÇO':'TERCEIROS'}, inplace=True)
 
         return df_saldo_atual_contratos
 
