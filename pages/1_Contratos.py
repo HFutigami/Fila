@@ -718,7 +718,7 @@ else:
         df_terceiros_contratos_resumido = st.session_state['df_terceiros_contratos_resumido']
 
     t3r1c1.write('Resumo de equipamentos entregues a outros setores.')
-    terceiros_contratos = t2r1c1.dataframe(df_terceiros_contratos_resumido[['TERCEIROS', 'QUANTIDADE']],
+    terceiros_contratos = t3r1c1.dataframe(df_terceiros_contratos_resumido[['TERCEIROS', 'QUANTIDADE']],
                                         hide_index=True,
                                         use_container_width=True,
                                         on_select='rerun')
