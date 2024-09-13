@@ -133,8 +133,7 @@ else:
 
     def create_df_saldo_contratos(df):
         df_saldo_atual_contratos = df
-        df_saldo_atual_contratos = df_saldo_atual_contratos[
-            (df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (~df_saldo_atual_contratos['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS'])]
+        df_saldo_atual_contratos = df_saldo_atual_contratos[(df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (~df_saldo_atual_contratos['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS'])]
 
         return df_saldo_atual_contratos
 
