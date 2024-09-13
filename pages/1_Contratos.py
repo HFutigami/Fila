@@ -132,7 +132,7 @@ else:
 
 
     def create_df_saldo_contratos(df):
-        df_saldo_atual_contratos = df
+        df_saldo_atual_contratos = df.copy()
         df_saldo_atual_contratos = df_saldo_atual_contratos[(df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (~df_saldo_atual_contratos['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']))]
 
         return df_saldo_atual_contratos
@@ -140,6 +140,8 @@ else:
 
     def create_df_saldo_contratos_resumido(df):
 
+        df = df.copy()
+        
         abertura_os = df_sharep(abertura_os_url, 'excel', 'BASE', sharepoint_os_url)
         abertura_os = abertura_os[abertura_os['ABRIR O.S'] != "0"]
         abertura_os.reset_index(drop=True, inplace=True)
@@ -176,7 +178,7 @@ else:
 
 
     def create_df_saidas_contratos(df):
-        df_saldo_atual_contratos = df
+        df_saldo_atual_contratos = df.copy()
         df_saldo_atual_contratos = df_saldo_atual_contratos[
             (df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (df_saldo_atual_contratos['ENDEREÇO'] == 'LAB')]
 
@@ -184,7 +186,7 @@ else:
 
 
     def create_df_saidas_contratos_resumido(df):
-        df = df
+        df = df.copy()
         df.loc[df['CLIENTE'].str.startswith('COBRA'), 'CLIENTE'] = 'COBRA'
         df.loc[df['CLIENTE'].str.startswith('BB'), 'CLIENTE'] = 'COBRA'
 
@@ -199,7 +201,7 @@ else:
 
 
     def create_df_terceiros_contratos(df):
-        df_saldo_atual_contratos = df
+        df_saldo_atual_contratos = df.copy()
         df_saldo_atual_contratos = df_saldo_atual_contratos[
             (df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (df_saldo_atual_contratos['ENDEREÇO'].isin(['EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']))]
         df.rename(columns={'ENDEREÇO':'TERCEIROS'}, inplace=True)
@@ -208,8 +210,7 @@ else:
 
 
     def create_df_terceiros_contratos_resumido(df):
-        df = df
-
+        df = df.copy()
         df = df.groupby(['TERCEIROS'])[['SERIAL']].count().reset_index()
         df = df.rename(columns={'SERIAL':'QUANTIDADE'})
         try:
