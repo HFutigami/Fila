@@ -538,7 +538,7 @@ else:
     st.sidebar.header('')
     st.sidebar.title('AÇÕES')
 
-    tabs_saldo, tabs_liberado, tabs_saida, tabs_geral = st.tabs(['Saldo', 'Liberado', 'Saídas', 'Tabela Geral'])
+    tabs_saldo, tabs_liberado, tabs_saida, tabs_terceiros, tabs_geral = st.tabs(['Saldo', 'Liberado', 'Saídas', 'Terceiros', 'Tabela Geral'])
 
     tabs_saldo.title('Saldo de Varejo')
     r0c1, r0c2, r0c3, r0c4 = tabs_saldo.columns(4, gap='large')
