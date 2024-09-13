@@ -222,6 +222,8 @@ else:
     def create_fig_criticos(df):
         df['CAIXA'] = df['CAIXA'].astype('str')
         df['CAIXA'] = "ㅤ" + df['CAIXA']
+        df['SERIAL'] = df['SERIAL'].astype('str')
+        df['SERIAL'] = "ㅤ" + df['SERIAL']
         df['ENTRADA FILA'] = df['ENTRADA FILA'].astype('str')
         try:
             df['RÓTULO'] = df['CLIENTE'] + ' - ' + df['ENDEREÇO'] + ' - ' + \
