@@ -139,8 +139,6 @@ else:
 
 
     def create_df_saldo_contratos_resumido(df):
-
-        df = df.copy()
         
         abertura_os = df_sharep(abertura_os_url, 'excel', 'BASE', sharepoint_os_url)
         abertura_os = abertura_os[abertura_os['ABRIR O.S'] != "0"]
@@ -186,7 +184,7 @@ else:
 
 
     def create_df_saidas_contratos_resumido(df):
-        df = df.copy()
+        
         df.loc[df['CLIENTE'].str.startswith('COBRA'), 'CLIENTE'] = 'COBRA'
         df.loc[df['CLIENTE'].str.startswith('BB'), 'CLIENTE'] = 'COBRA'
 
@@ -210,7 +208,7 @@ else:
 
 
     def create_df_terceiros_contratos_resumido(df):
-        df = df.copy()
+        
         df = df.groupby(['TERCEIROS'])[['SERIAL']].count().reset_index()
         df = df.rename(columns={'SERIAL':'QUANTIDADE'})
         try:
