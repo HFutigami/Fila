@@ -124,7 +124,7 @@ else:
 
 
     def create_df_saldo_varejo(df):
-        df_saldo_atual_varejo = df
+        df_saldo_atual_varejo = df.copy()
         df_saldo_atual_varejo = df_saldo_atual_varejo[(~df_saldo_atual_varejo['FLUXO'].isin(['CONTRATO', 'OS INTERNA'])) & (df_saldo_atual_varejo['ENDEREÇO'] != 'LAB')]
 
         return df_saldo_atual_varejo
@@ -132,7 +132,7 @@ else:
 
     def create_df_saldo_varejo_resumido(df):
         
-        df_saldo_atual_varejo_resumido = df.copy()
+        df_saldo_atual_varejo_resumido = df
         df_saldo_atual_varejo_resumido = df_saldo_atual_varejo_resumido.sort_values(['ENTRADA FILA']).drop_duplicates(['SERIAL', 'CLIENTE', 'NUM OS'], keep='last')
         df_saldo_atual_varejo_resumido = df_saldo_atual_varejo_resumido.groupby(['CLIENTE', 'EQUIPAMENTO'])[['SERIAL']].count().reset_index()
         df_saldo_atual_varejo_resumido.rename(columns={'SERIAL':'QUANTIDADE'}, inplace=True)
@@ -146,7 +146,7 @@ else:
 
 
     def create_df_saidas_varejo(df):
-        df_saldo_atual_varejo = df
+        df_saldo_atual_varejo = df.copy()
         df_saldo_atual_varejo = df_saldo_atual_varejo[(~df_saldo_atual_varejo['FLUXO'].isin(['CONTRATO', 'OS INTERNA'])) & (df_saldo_atual_varejo['ENDEREÇO'] == 'LAB')]
 
         return df_saldo_atual_varejo
