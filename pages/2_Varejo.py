@@ -218,7 +218,7 @@ else:
         return df
 
 
-    def create_df_terceiros_contratos(df):
+    def create_df_terceiros_varejo(df):
         df_saldo_atual_contratos = df.copy()
         df_saldo_atual_contratos = df_saldo_atual_contratos[
             (df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (df_saldo_atual_contratos['ENDEREÇO'].isin(
@@ -228,7 +228,7 @@ else:
         return df_saldo_atual_contratos
 
 
-    def create_df_terceiros_contratos_resumido(df):
+    def create_df_terceiros_varejo_resumido(df):
 
         df = df.groupby(['TERCEIROS'])[['SERIAL']].count().reset_index()
         df = df.rename(columns={'SERIAL': 'QUANTIDADE'})
