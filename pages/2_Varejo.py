@@ -221,7 +221,7 @@ else:
     def create_df_terceiros_varejo(df):
         df_saldo_atual_contratos = df.copy()
         df_saldo_atual_contratos = df_saldo_atual_contratos[
-            (df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (df_saldo_atual_contratos['ENDEREÇO'].isin(
+            (df_saldo_atual_contratos['FLUXO'] == 'VAREJO') & (df_saldo_atual_contratos['ENDEREÇO'].isin(
                 ['EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']))]
         df_saldo_atual_contratos.rename(columns={'ENDEREÇO': 'TERCEIROS'}, inplace=True)
 
