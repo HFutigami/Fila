@@ -132,13 +132,62 @@ else:
         return historico_fila
 
     
+    def create_df_prioridades(df):
+        df_prioridades = df[df['CAIXA'].isin(df_sharep(prioridade_url, tipo='excel')['CAIXAS'])].copy()
+        df_prioridades['FILA'] = df['ENDEREÇO'].apply(lambda  x: 1 if x not in ['LAB', 'EQUIPE TECNICA', 'GESTAO DE ATIVOS', 'QUALIDADE', 'RETRIAGEM'] else 0)
+        df_prioridades['SAÍDA'] = df['ENDEREÇO'].apply(lambda x: 1 if x in ['LAB', 'EQUIPE TECNICA', 'GESTAO DE ATIVOS', 'QUALIDADE', 'RETRIAGEM'] else 0)
+        
+        return df_prioridades
+
+
+    def create_df_saldo_contratos_resumido(df):
+        
+        abertura_os = df_sharep(abertura_os_url, 'excel', 'BASE', sharepoint_os_url)
+        abertura_os = abertura_os[abertura_os['ABRIR O.S'] != "0"]
+        abertura_os.reset_index(drop=True, inplace=True)
+        abertura_os.loc[abertura_os['CLIENTE GERFLOOR'].isna(), 'CLIENTE GERFLOOR'] = abertura_os.loc[
+            abertura_os['CLIENTE GERFLOOR'].isna(), 'CLIENTES'].apply(lambda x: x.split(" - ", maxsplit=1)[0])
+        abertura_os.loc[abertura_os['EQUIPAMENTO GERFLOOR'].isna(), 'EQUIPAMENTO GERFLOOR'] = abertura_os.loc[
+            abertura_os['EQUIPAMENTO GERFLOOR'].isna(), 'CLIENTES'].apply(lambda x: x.split(" - ", maxsplit=1)[1])
+        abertura_os = abertura_os.rename(columns={'CLIENTE GERFLOOR': 'CLIENTE',
+                                                  'EQUIPAMENTO GERFLOOR': 'EQUIPAMENTO'}).set_index(
+            ['CLIENTE', 'EQUIPAMENTO']).drop(['PENDÊNCIA', 'O.S ABERTA', 'CLIENTES'], axis=1)
+
+        df.loc[df['CLIENTE'].str.startswith('COBRA'), 'CLIENTE'] = 'COBRA'
+        df.loc[df['CLIENTE'].str.startswith('BB'), 'CLIENTE'] = 'COBRA'
+
+        df_saldo_atual_contratos_resumido = df.groupby(['CLIENTE', 'EQUIPAMENTO'])[['SERIAL']].count().reset_index()
+
+        df_saldo_atual_contratos_resumido = df_saldo_atual_contratos_resumido.join(abertura_os,
+                                                                                   on=['CLIENTE', 'EQUIPAMENTO'],
+                                                                                   how='outer')
+        df_saldo_atual_contratos_resumido.loc[df_saldo_atual_contratos_resumido['SERIAL'].isna(), 'SERIAL'] = 0
+        df_saldo_atual_contratos_resumido.SERIAL = df_saldo_atual_contratos_resumido.SERIAL.astype(int)
+        df_saldo_atual_contratos_resumido.loc[df_saldo_atual_contratos_resumido['ABRIR O.S'].isna(), 'ABRIR O.S'] = 0
+        df_saldo_atual_contratos_resumido['ABRIR O.S'] = df_saldo_atual_contratos_resumido['ABRIR O.S'].astype(int)
+        df_saldo_atual_contratos_resumido.rename(columns={'SERIAL': 'QTD FILA',
+                                                          'ABRIR O.S': 'QTD OS'}, inplace=True)
+        df_saldo_atual_contratos_resumido = df_saldo_atual_contratos_resumido[
+            ['CLIENTE', 'EQUIPAMENTO', 'QTD OS', 'QTD FILA']]
+        try:
+            df_saldo_atual_contratos_resumido.sort_values(['CLIENTE', 'EQUIPAMENTO'], inplace=True)
+        except:
+            pass
+
+        return df_saldo_atual_contratos_resumido
+
+    
     if 'historico_fila' not in st.session_state:
         st.session_state['historico_fila'] = create_df_historico_movimentações()
         historico_fila = st.session_state['historico_fila']
     else:
         historico_fila = st.session_state['historico_fila']
 
-    st.sidebar.header('')
-    st.sidebar.title('AÇÕES')
+    if 'prioridades_df' not in st.session_state:
+        st.session_state['prioridades_df'] = create_df_prioridades(historico_fila)
+        prioridades_df = st.session_state['prioridades_df']
+    else:
+        prioridades_df = st.session_state['prioridades_df']
 
-    st.dataframe(historico_fila[historico_fila['CAIXA'].isin(df_sharep(prioridade_url, tipo='excel')['CAIXAS'])]) 
+
+
