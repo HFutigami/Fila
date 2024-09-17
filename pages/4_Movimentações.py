@@ -151,6 +151,50 @@ else:
 
         return df_prioridades_resumido
 
+
+    def create_fig_criticos(df):
+        df['CAIXA'] = df['CAIXA'].astype('str')
+        df['CAIXA'] = "ㅤ" + df['CAIXA']
+        df['ENTRADA FILA'] = df['ENTRADA FILA'].astype('str')
+        df['RÓTULO'] = df['CLIENTE'] + ' - ' + df['ENDEREÇO'] + ' - ' + \
+                       df['ENTRADA FILA'].str.replace('-', '/').str.split(" ").str[0]
+
+        df = df.groupby(['CAIXA', 'RÓTULO', '% DO SLA'])['SERIAL'].count().reset_index().sort_values('% DO SLA',
+                                                                                                     ascending=True).tail(
+            10)
+
+        fig = px.bar(df,
+                     x='% DO SLA',
+                     y='CAIXA',
+                     color='% DO SLA',
+                     orientation='h',
+                     text='RÓTULO',
+                     color_continuous_scale=[(0, "#008000"),
+                                             (0.2, "#32CD32"),
+                                             (0.45, "#FFD700"),
+                                             (0.8, "#FF8C00"),
+                                             (1, "#8B0000")],
+                     range_color=[0, 1])
+        return fig
+
+
+    def create_fig_status(df):
+        df = df.copy()
+        df[~df['ENDEREÇO'].isin ['LAB', 'EQUIPE TECNICA', 'GESTAO DE ATIVOS', 'QUALIDADE', 'RETRIAGEM'], 'ENDEREÇO'] = 'FILA'
+        df[df['ENDEREÇO'].isin ['LAB', 'EQUIPE TECNICA', 'GESTAO DE ATIVOS', 'QUALIDADE', 'RETRIAGEM'], 'ENDEREÇO'] = 'FORA DO FILA'
+        df = df.groupby(['ENDEREÇO'])[['SERIAL']].count().reset_index()
+
+        fig = px.pie(df,
+                                    names='ENDEREÇO',
+                                    values='SERIAL',
+                                    color='ENDEREÇO',
+                                    hole=0.4,
+                                    color_discrete_map={'FORA DO FILA':'#008000',
+                                                        'FILA':'#8B0000'},)
+        fig.update_traces(textinfo='value+percent')
+
+        return fig
+
     
     if 'historico_fila' not in st.session_state:
         st.session_state['historico_fila'] = create_df_historico_movimentações()
@@ -190,5 +234,37 @@ else:
     else:
         r0c1.metric('Total de equipamentos',
                     '{:,}'.format(sum(prioridade_resumido_df['QTD EM FILA'])).replace(',', '.'))
+
+
+        else:
+        r0c1.metric('Total de equipamentos',
+                    '{:,}'.format(sum(df_saldo_atual_varejo_resumido['QUANTIDADE'])).replace(',', '.'))
+       
+    if r0c4.button('FILTROS DE SALDO', use_container_width=True):
+        open_dialog_filtros_saldo()
+
+
+    if 'prioridades_selecao' in st.session_state and saldo_atual_varejo.selection.rows:
+        if len(st.session_state['prioridades_selecao']) > 0:
+            r1c2.write('Classificação dos equipamentos no fila de acordo com % do SLA.')
+            r1c2.plotly_chart(create_fig_criticos(st.session_state['prioridades_selecao'][
+                                                      ~st.session_state['prioridades_selecao'][
+                                                          '% DO SLA'].isna()].copy()))
+
+            r2c1.write('Saldo detalhado de equipamentos no fila.')
+            r2c1.dataframe(prioridades_selecao[[
+                'ENDEREÇO', 'CAIXA', 'SERIAL', 'CLIENTE',
+                'EQUIPAMENTO', 'NUM OS', 'ENTRADA GERFLOOR',
+                'ENTRADA FILA', 'AGING TOTAL', 'AGING FILA',
+                'STATUS'
+            ]],
+                           hide_index=True,
+                           use_container_width=True,
+                           column_config={
+                               'ENTRADA GERFLOOR':st.column_config.DateColumn('ENTRADA GERFLOOR', format="DD/MM/YYYY"),
+                               'ENTRADA FILA':st.column_config.DateColumn('ENTRADA FILA', format="DD/MM/YYYY HH:mm:ss")
+                           })
+            r2c2.write('Status dos equipamentos em relação a entrega do SLA.')
+            r2c2.plotly_chart(create_fig_status(st.session_state['prioridades_selecao']))
         
 
