@@ -170,7 +170,7 @@ else:
 
 
     r0c1, r0c2, r0c3, r0c4 = st.columns(4, gap='large')
-    tabs_saldo.write('')
+    st.write('')
     r1c1, r1c2 = st.columns(2, gap='large')
     r2c1, r2c2 = st.columns([0.7, 0.3], gap='large')
     
