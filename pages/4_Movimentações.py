@@ -153,6 +153,7 @@ else:
 
 
     def create_fig_criticos(df):
+        df = df[~df['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'GESTAO DE ATIVOS', 'QUALIDADE', 'RETRIAGEM'])]
         df['CAIXA'] = df['CAIXA'].astype('str')
         df['CAIXA'] = "ㅤ" + df['CAIXA']
         df['ENTRADA FILA'] = df['ENTRADA FILA'].astype('str')
@@ -217,7 +218,8 @@ else:
     st.write('')
     r1c1, r1c2 = st.columns(2, gap='large')
     r2c1, r2c2 = st.columns([0.7, 0.3], gap='large')
-    
+
+    r1c1.write('Saldo resumido de equipamentos prioritários.')
     prioridade_resumido_stdf = r1c1.dataframe(prioridade_resumido_df[['CLIENTE', 'EQUIPAMENTO', 'QTD EM FILA', 'QTD FORA DO FILA']],
                                             hide_index=True,
                                             use_container_width=True,
@@ -243,7 +245,7 @@ else:
                                                       ~st.session_state['prioridades_selecao'][
                                                           '% DO SLA'].isna()].copy()))
 
-            r2c1.write('Saldo detalhado de equipamentos no fila.')
+            r2c1.write('Saldo detalhado de equipamentos prioritários.')
             r2c1.dataframe(prioridades_selecao[[
                 'ENDEREÇO', 'CAIXA', 'SERIAL', 'CLIENTE',
                 'EQUIPAMENTO', 'NUM OS', 'ENTRADA GERFLOOR',
@@ -256,7 +258,7 @@ else:
                                'ENTRADA GERFLOOR':st.column_config.DateColumn('ENTRADA GERFLOOR', format="DD/MM/YYYY"),
                                'ENTRADA FILA':st.column_config.DateColumn('ENTRADA FILA', format="DD/MM/YYYY HH:mm:ss")
                            })
-            r2c2.write('Status dos equipamentos em relação a entrega do SLA.')
+            r2c2.write('Relação de equipamentos em fila x fora do fila.')
             r2c2.plotly_chart(create_fig_status(st.session_state['prioridades_selecao']))
         
 
