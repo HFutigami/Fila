@@ -143,7 +143,7 @@ else:
     def create_df_prioridades_resumido(df):
 
         df_prioridades_resumido = df.groupby(['CLIENTE', 'EQUIPAMENTO'])[['FILA', 'SAÍDA']].sum().reset_index()
-        df_prioridades_resumido.rename(columns={'FILA':'QTD EM FILA', 'SAÍDA':'QTD FORA DO FILA'})
+        df_prioridades_resumido.rename(columns={'FILA':'QTD EM FILA', 'SAÍDA':'QTD FORA DO FILA'}, inplace=True)
         try:
             df_prioridades_resumido.sort_values(['CLIENTE', 'EQUIPAMENTO'], inplace=True)
         except:
