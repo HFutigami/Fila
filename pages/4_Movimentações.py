@@ -168,7 +168,13 @@ else:
         prioridades_df = st.session_state['prioridades_df']
         prioridade_resumido_df = st.session_state['prioridade_resumido_df']
 
-    prioridade_resumido_stdf = st.dataframe(prioridade_resumido_df,
+
+    r0c1, r0c2, r0c3, r0c4 = st.columns(4, gap='large')
+    tabs_saldo.write('')
+    r1c1, r1c2 = st.columns(2, gap='large')
+    r2c1, r2c2 = st.columns([0.7, 0.3], gap='large')
+    
+    prioridade_resumido_stdf = r1c1.dataframe(prioridade_resumido_df,
                                             hide_index=True,
                                             use_container_width=True,
                                             on_select='rerun')
@@ -179,10 +185,10 @@ else:
         filtro_saldo = list(prioridade_resumido_df.iloc[prioridade_resumido_stdf.selection.rows]['CONCATENADO'])
         prioridades_selecao = prioridades_df[prioridades_df['CONCATENADO'].isin(filtro_saldo)]
         st.session_state['prioridades_selecao'] = prioridades_selecao
-        st.metric('Total de equipamentos (seleção)',
+        r0c1.metric('Total de equipamentos (seleção)',
                     '{:,}'.format(sum(prioridade_resumido_df.iloc[prioridade_resumido_stdf.selection.rows]['QTD EM FILA'])).replace(',', '.'))
     else:
-        st.metric('Total de equipamentos',
+        r0c1.metric('Total de equipamentos',
                     '{:,}'.format(sum(prioridade_resumido_df['QTD EM FILA'])).replace(',', '.'))
         
 
