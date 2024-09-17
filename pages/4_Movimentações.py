@@ -133,7 +133,8 @@ else:
 
     
     def create_df_prioridades(df):
-        df_prioridades = df[df['CAIXA'].isin(df_sharep(prioridade_url, tipo='excel')['CAIXAS'])].copy()
+        prioridade = df_sharep(prioridade_url, tipo='excel')
+        df_prioridades = df[(df['CAIXA'].isin(prioridade['CAIXAS'])) or (df[df['NUM OS'].isin(prioridades['CAIXAS'])])].copy()
         df_prioridades['FILA'] = df['ENDEREÇO'].apply(lambda  x: 1 if x not in ['LAB', 'EQUIPE TECNICA', 'GESTAO DE ATIVOS', 'QUALIDADE', 'RETRIAGEM'] else 0)
         df_prioridades['SAÍDA'] = df['ENDEREÇO'].apply(lambda x: 1 if x in ['LAB', 'EQUIPE TECNICA', 'GESTAO DE ATIVOS', 'QUALIDADE', 'RETRIAGEM'] else 0)
         
