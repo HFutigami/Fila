@@ -141,4 +141,4 @@ else:
     st.sidebar.header('')
     st.sidebar.title('AÇÕES')
 
-    st.dataframe(historico_fila[historico_fila['CAIXAS'].isin(df_sharep(prioridade_url, tipo='excel')['CAIXAS'])]) 
+    st.dataframe(historico_fila[historico_fila['CAIXA'].isin(df_sharep(prioridade_url, tipo='excel')['CAIXAS'])]) 
