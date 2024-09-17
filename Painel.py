@@ -24,4 +24,6 @@ if 'connection' not in st.session_state:
                 st.session_state['connection'] = 'editor'
             else:
                 st.warning('Usuário ou senha inválidos!', icon="⚠️")
+else:
+    st.switch_page('4_Movimentações.py')
 
