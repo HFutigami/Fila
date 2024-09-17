@@ -174,15 +174,15 @@ else:
                                             on_select='rerun')
 
     if prioridade_resumido_stdf.selection.rows:
-        prioridade_resumido_stdf['CONCATENADO'] = prioridade_resumido_stdf['CLIENTE'] + prioridade_resumido_stdf['EQUIPAMENTO']
+        prioridade_resumido_df['CONCATENADO'] = prioridade_resumido_df['CLIENTE'] + prioridade_resumido_df['EQUIPAMENTO']
         prioridades_df['CONCATENADO'] = prioridades_df['CLIENTE'] + prioridades_df['EQUIPAMENTO']
-        filtro_saldo = list(prioridade_resumido_stdf.iloc[prioridades_df.selection.rows]['CONCATENADO'])
+        filtro_saldo = list(prioridade_resumido_df.iloc[prioridades_df.selection.rows]['CONCATENADO'])
         prioridades_selecao = prioridades_df[prioridades_df['CONCATENADO'].isin(filtro_saldo)]
         st.session_state['prioridades_selecao'] = prioridades_selecao
         st.metric('Total de equipamentos (seleção)',
-                    '{:,}'.format(sum(prioridade_resumido_stdf.iloc[saldo_atual_varejo.selection.rows]['QTD EM FILA'])).replace(',', '.'))
+                    '{:,}'.format(sum(prioridade_resumido_df.iloc[saldo_atual_varejo.selection.rows]['QTD EM FILA'])).replace(',', '.'))
     else:
         st.metric('Total de equipamentos',
-                    '{:,}'.format(sum(prioridade_resumido_stdf['QTD EM FILA'])).replace(',', '.'))
+                    '{:,}'.format(sum(prioridade_resumido_df['QTD EM FILA'])).replace(',', '.'))
         
 
