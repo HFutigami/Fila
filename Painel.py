@@ -18,9 +18,11 @@ if 'connection' not in st.session_state:
         st.write("Login")
         user = st.text_input('Usuário')
         senha = st.text_input('Senha', type='password')
-        if senha == st.secrets['credenciais'].SENHA and user == st.secrets['credenciais'].USER:
-            st.session_state['connection'] = 'editor'
-            st.switch_page('4_Movimentações.py')
-        else:
-            st.warning('Usuário ou senha inválidos!', icon="⚠️")
+        submitted = st.form_submit_button("Login")
+        if submitted:
+            if senha == st.secrets['credenciais'].SENHA and user == st.secrets['credenciais'].USER:
+                st.session_state['connection'] = 'editor'
+                st.switch_page('4_Movimentações.py')
+            else:
+                st.warning('Usuário ou senha inválidos!', icon="⚠️")
 
