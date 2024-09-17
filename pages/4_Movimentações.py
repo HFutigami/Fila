@@ -189,5 +189,5 @@ else:
     else:
         prioridades_df = st.session_state['prioridades_df']
 
-    st.dataframe(prioridade_df)
+    st.dataframe(prioridades_df)
 
