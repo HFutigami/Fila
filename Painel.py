@@ -25,5 +25,5 @@ if 'connection' not in st.session_state:
             else:
                 st.warning('Usuário ou senha inválidos!', icon="⚠️")
 else:
-    st.switch_page('4_Movimentações.py')
+    st.switch_page('pages/4_Movimentações.py')
 
