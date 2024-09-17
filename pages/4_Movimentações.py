@@ -180,8 +180,8 @@ else:
 
     def create_fig_status(df):
         df = df.copy()
-        df[~df['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'GESTAO DE ATIVOS', 'QUALIDADE', 'RETRIAGEM']), 'ENDEREÇO'] = 'FILA'
-        df[df['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'GESTAO DE ATIVOS', 'QUALIDADE', 'RETRIAGEM']), 'ENDEREÇO'] = 'FORA DO FILA'
+        df.loc[~df['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'GESTAO DE ATIVOS', 'QUALIDADE', 'RETRIAGEM']), 'ENDEREÇO'] = 'FILA'
+        df.loc[df['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'GESTAO DE ATIVOS', 'QUALIDADE', 'RETRIAGEM']), 'ENDEREÇO'] = 'FORA DO FILA'
         df = df.groupby(['ENDEREÇO'])[['SERIAL']].count().reset_index()
 
         fig = px.pie(df,
