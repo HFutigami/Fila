@@ -234,15 +234,7 @@ else:
     else:
         r0c1.metric('Total de equipamentos',
                     '{:,}'.format(sum(prioridade_resumido_df['QTD EM FILA'])).replace(',', '.'))
-
-
-        else:
-        r0c1.metric('Total de equipamentos',
-                    '{:,}'.format(sum(df_saldo_atual_varejo_resumido['QUANTIDADE'])).replace(',', '.'))
-       
-    if r0c4.button('FILTROS DE SALDO', use_container_width=True):
-        open_dialog_filtros_saldo()
-
+        
 
     if 'prioridades_selecao' in st.session_state and saldo_atual_varejo.selection.rows:
         if len(st.session_state['prioridades_selecao']) > 0:
