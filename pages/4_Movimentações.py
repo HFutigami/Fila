@@ -174,7 +174,7 @@ else:
     r1c1, r1c2 = st.columns(2, gap='large')
     r2c1, r2c2 = st.columns([0.7, 0.3], gap='large')
     
-    prioridade_resumido_stdf = r1c1.dataframe(prioridade_resumido_df,
+    prioridade_resumido_stdf = r1c1.dataframe(prioridade_resumido_df['CLIENTE', 'EQUIPAMENTO', 'QTD EM FILA', 'QTD FORA DO FILA'],
                                             hide_index=True,
                                             use_container_width=True,
                                             on_select='rerun')
