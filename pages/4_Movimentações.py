@@ -236,7 +236,7 @@ else:
                     '{:,}'.format(sum(prioridade_resumido_df['QTD EM FILA'])).replace(',', '.'))
         
 
-    if 'prioridades_selecao' in st.session_state and saldo_atual_varejo.selection.rows:
+    if 'prioridades_selecao' in st.session_state and prioridade_resumido_stdf.selection.rows:
         if len(st.session_state['prioridades_selecao']) > 0:
             r1c2.write('Classificação dos equipamentos no fila de acordo com % do SLA.')
             r1c2.plotly_chart(create_fig_criticos(st.session_state['prioridades_selecao'][
