@@ -547,7 +547,7 @@ else:
 
     r1c1.write('Resumo de saldo de equipamentos.')
     saldo_atual_contratos = r1c1.dataframe(
-        df_saldo_atual_contratos_resumido[['CLIENTE', 'EQUIPAMENTO', 'QTD OS', 'QTD FILA']],
+        df_saldo_atual_contratos_resumido[['CLIENTE', 'EQUIPAMENTO', 'QTD OS', 'QTD FILA', 'DIVERGÊNCIA']],
         hide_index=True,
         use_container_width=True,
         on_select='rerun',
