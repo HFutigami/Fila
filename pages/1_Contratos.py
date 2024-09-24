@@ -135,6 +135,8 @@ else:
         df_saldo_atual_contratos = df.copy()
         df_saldo_atual_contratos = df_saldo_atual_contratos[(df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (~df_saldo_atual_contratos['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']))]
 
+        st.dataframe(df_saldo_atual_contratos)
+        
         return df_saldo_atual_contratos
 
 
