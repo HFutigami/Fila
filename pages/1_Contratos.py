@@ -135,8 +135,6 @@ else:
         df_saldo_atual_contratos = df.copy()
         df_saldo_atual_contratos = df_saldo_atual_contratos[(df_saldo_atual_contratos['FLUXO'] == 'CONTRATO') & (~df_saldo_atual_contratos['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']))]
 
-        st.dataframe(df_saldo_atual_contratos)
-        
         return df_saldo_atual_contratos
 
 
@@ -151,7 +149,7 @@ else:
             abertura_os['EQUIPAMENTO GERFLOOR'].isna(), 'CLIENTES'].apply(lambda x: x.split(" - ", maxsplit=1)[1])
         abertura_os = abertura_os.rename(columns={'CLIENTE GERFLOOR': 'CLIENTE',
                                                   'EQUIPAMENTO GERFLOOR': 'EQUIPAMENTO'}).set_index(
-            ['CLIENTE', 'EQUIPAMENTO']).drop(['PENDÊNCIA', 'O.S ABERTA', 'CLIENTES'], axis=1)
+            ['CLIENTE', 'EQUIPAMENTO']).drop(['O.S ABERTA', 'CLIENTES'], axis=1)
 
         df.loc[df['CLIENTE'].str.startswith('COBRA'), 'CLIENTE'] = 'COBRA'
         df.loc[df['CLIENTE'].str.startswith('BB'), 'CLIENTE'] = 'COBRA'
