@@ -166,7 +166,7 @@ else:
         df_saldo_atual_contratos_resumido.rename(columns={'SERIAL': 'QTD FILA',
                                                           'ABRIR O.S': 'QTD OS'}, inplace=True)
         df_saldo_atual_contratos_resumido = df_saldo_atual_contratos_resumido[
-            ['CLIENTE', 'EQUIPAMENTO', 'QTD OS', 'QTD FILA']]
+            ['CLIENTE', 'EQUIPAMENTO', 'QTD OS', 'QTD FILA', 'DIVERGÊNCIA']]
         try:
             df_saldo_atual_contratos_resumido.sort_values(['CLIENTE', 'EQUIPAMENTO'], inplace=True)
         except:
