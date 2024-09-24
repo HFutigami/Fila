@@ -163,6 +163,8 @@ else:
         df_saldo_atual_contratos_resumido.SERIAL = df_saldo_atual_contratos_resumido.SERIAL.astype(int)
         df_saldo_atual_contratos_resumido.loc[df_saldo_atual_contratos_resumido['ABRIR O.S'].isna(), 'ABRIR O.S'] = 0
         df_saldo_atual_contratos_resumido['ABRIR O.S'] = df_saldo_atual_contratos_resumido['ABRIR O.S'].astype(int)
+        df_saldo_atual_contratos_resumido.loc[df_saldo_atual_contratos_resumido[DIVERGÊNCIA'].isna(), 'DIVERGÊNCIA'] = 0
+        df_saldo_atual_contratos_resumido['DIVERGÊNCIA'] = df_saldo_atual_contratos_resumido['DIVERGÊNCIA'].astype(int)
         df_saldo_atual_contratos_resumido.rename(columns={'SERIAL': 'QTD FILA',
                                                           'ABRIR O.S': 'QTD OS'}, inplace=True)
         df_saldo_atual_contratos_resumido = df_saldo_atual_contratos_resumido[
