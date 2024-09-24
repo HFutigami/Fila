@@ -171,7 +171,7 @@ else:
             df_saldo_atual_contratos_resumido.sort_values(['CLIENTE', 'EQUIPAMENTO'], inplace=True)
         except:
             pass
-
+            
         return df_saldo_atual_contratos_resumido
 
 
@@ -377,7 +377,7 @@ else:
 
         df.loc[df['EQUIPAMENTO'].str.contains('PPC930'), 'EQUIPAMENTO'] = 'PPC930'
 
-        df = df.groupby(['CLIENTE', 'EQUIPAMENTO'])[['QTD OS', 'QTD FILA']].sum().reset_index()
+        df = df.groupby(['CLIENTE', 'EQUIPAMENTO'])[['QTD OS', 'QTD FILA', 'DIVERGÊNCIA']].sum().reset_index()
 
         html_contratos = df[['CLIENTE', 'EQUIPAMENTO', 'QTD OS', 'QTD FILA']].to_html(index=False, index_names=False,
                                                                                       justify='left', na_rep='')
