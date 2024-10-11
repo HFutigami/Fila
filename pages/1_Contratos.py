@@ -378,6 +378,7 @@ else:
         df.loc[df['CLIENTE'].str.startswith('MERCADO'), 'CLIENTE'] = 'MERCADO PAGO'
 
         df.loc[df['EQUIPAMENTO'].str.contains('PPC930'), 'EQUIPAMENTO'] = 'PPC930'
+        df.loc[df['EQUIPAMENTO'].str.contains('MP35P'), 'EQUIPAMENTO'] = 'MP35P'
 
         df = df.groupby(['CLIENTE', 'EQUIPAMENTO'])[['QTD OS', 'QTD FILA', 'DIVERGÊNCIA']].sum().reset_index()
 
