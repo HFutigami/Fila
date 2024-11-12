@@ -869,11 +869,11 @@ else:
                       '{:,}'.format(len(garantia_varejo_selecao.loc[~garantia_varejo_selecao['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'SERIAL'])).replace(',', '.'))
     else:
         t5r0c1.metric('Garantia entregues ao lab',
-                      '{:,}'.format(sum(df_garantia_varejo.loc[df_garantia_varejo['ENDEREÇO'] == 'LAB', 'QUANTIDADE'])).replace(',', '.'))
+                      '{:,}'.format(len(df_garantia_varejo.loc[df_garantia_varejo['ENDEREÇO'] == 'LAB', 'SERIAL'])).replace(',', '.'))
         t5r0c2.metric('Garantia entregues a terceiros (seleção).',
-                      '{:,}'.format(len(df_garantia_varejo.loc[df_garantia_varejo['ENDEREÇO'].isin(['EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'QUANTIDADE'])).replace(',', '.'))
+                      '{:,}'.format(len(df_garantia_varejo.loc[df_garantia_varejo['ENDEREÇO'].isin(['EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'SERIAL'])).replace(',', '.'))
         t5r0c3.metric('Garantia em estoque (seleção).',
-                      '{:,}'.format(len(df_garantia_varejo.loc[~df_garantia_varejo['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'QUANTIDADE'])).replace(',', '.'))
+                      '{:,}'.format(len(df_garantia_varejo.loc[~df_garantia_varejo['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'SERIAL'])).replace(',', '.'))
 
     if 'garantia_varejo_selecao' in st.session_state and garantia_varejo.selection.rows:
         t5r1c2.write('Classificação dos equipamentos em posse de terceiros de acordo com % do SLA.')
