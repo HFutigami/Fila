@@ -837,7 +837,8 @@ else:
     t5r0c1, t5r0c2, t5r0c3, t5r0c4 = tabs_garantia.columns(4)
     tabs_garantia.write('')
     t5r1c1, t5r1c2 = tabs_garantia.columns(2, gap='large')
-    t5r2c1, t5r2c2 = tabs_garantia.columns([6, 4], gap='large')
+    t5r2c1 = tabs_garantia.container()
+    t5r3c1 = tabs_garantia.container()
 
     if 'df_garantia_varejo' not in st.session_state or 'df_terceiros_varejo_resumido' not in st.session_state:
         st.session_state['df_garantia_varejo'] = create_df_garantia_varejo(historico_fila)
@@ -868,11 +869,11 @@ else:
         t5r0c3.metric('Garantia em estoque (seleção).',
                       '{:,}'.format(len(garantia_varejo_selecao.loc[~garantia_varejo_selecao['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'SERIAL'])).replace(',', '.'))
     else:
-        t5r0c1.metric('Garantia entregues ao lab',
+        t5r0c1.metric('Garantia entregues ao lab.',
                       '{:,}'.format(len(df_garantia_varejo.loc[df_garantia_varejo['ENDEREÇO'] == 'LAB', 'SERIAL'])).replace(',', '.'))
-        t5r0c2.metric('Garantia entregues a terceiros (seleção).',
+        t5r0c2.metric('Garantia entregues a terceiros.',
                       '{:,}'.format(len(df_garantia_varejo.loc[df_garantia_varejo['ENDEREÇO'].isin(['EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'SERIAL'])).replace(',', '.'))
-        t5r0c3.metric('Garantia em estoque (seleção).',
+        t5r0c3.metric('Garantia em estoque.',
                       '{:,}'.format(len(df_garantia_varejo.loc[~df_garantia_varejo['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'SERIAL'])).replace(',', '.'))
 
     if 'garantia_varejo_selecao' in st.session_state and garantia_varejo.selection.rows:
@@ -881,11 +882,23 @@ else:
                                                     ~st.session_state['garantia_varejo_selecao'][
                                                         '% DO SLA'].isna()].copy()))
 
-        t5r2c2.write('Status dos equipamentos em relação ao SLA.')
-        t5r2c2.plotly_chart(create_fig_status(st.session_state['garantia_varejo_selecao']))
+        t5r2c1.write('Saldo de equipamentos com garantia no fila.')
+        t5r2c1.dataframe(st.session_state['garantia_varejo_selecao'].loc[st.session_state['garantia_varejo_selecao']['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']),
+                                                                         ['CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
+                                                                          'NUM OS', 'ENTRADA GERFLOOR', 'ENTRADA FILA',
+                                                                          'SAÍDA FILA', 'AGING TOTAL', 'AGING FILA',
+                                                                          'STATUS']].sort_values(['SAÍDA FILA']),
+                         hide_index=True,
+                         use_container_width=True,
+                         column_config={
+                             'ENTRADA GERFLOOR': st.column_config.DateColumn('ENTRADA GERFLOOR', format='DD/MM/YYYY'),
+                             'ENTRADA FILA': st.column_config.DateColumn('ENTRADA FILA', format='DD/MM/YYYY HH:mm:ss'),
+                             'SAÍDA FILA': st.column_config.DateColumn('SAÍDA FILA', format='DD/MM/YYYY HH:mm:ss')
+                         })
 
-        t5r2c1.write('Histórico detalhado de equipamentos entregues ao laboratório.')
-        t5r2c1.dataframe(st.session_state['garantia_varejo_selecao'][['CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
+        t5r2c1.write('Histórico de saídas de equipamentos com garantia.')
+        t5r2c1.dataframe(st.session_state['garantia_varejo_selecao'].loc[st.session_state['garantia_varejo_selecao']['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']),
+                                                                         ['ENDEREÇO', 'CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
                                                                           'NUM OS', 'ENTRADA GERFLOOR', 'ENTRADA FILA',
                                                                           'SAÍDA FILA', 'AGING TOTAL', 'AGING FILA',
                                                                           'STATUS']].sort_values(['SAÍDA FILA']),
