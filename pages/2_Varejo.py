@@ -884,9 +884,9 @@ else:
 
         t5r2c1.write('Saldo de equipamentos com garantia no fila.')
         t5r2c1.dataframe(st.session_state['garantia_varejo_selecao'].loc[~st.session_state['garantia_varejo_selecao']['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']),
-                                                                         ['CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
+                                                                         ['ENDEREÇO', 'CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
                                                                           'NUM OS', 'ENTRADA GERFLOOR', 'ENTRADA FILA',
-                                                                          'SAÍDA FILA', 'AGING TOTAL', 'AGING FILA',
+                                                                          'AGING TOTAL', 'AGING FILA',
                                                                           'STATUS']].sort_values(['SAÍDA FILA']),
                          hide_index=True,
                          use_container_width=True,
