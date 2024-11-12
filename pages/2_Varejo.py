@@ -861,11 +861,19 @@ else:
         garantia_varejo_selecao = df_garantia_varejo[df_garantia_varejo['CLIENTE'].isin(filtro_saldo)]
         st.session_state['garantia_varejo_selecao'] = garantia_varejo_selecao
 
-        t5r0c1.metric('Total em posse de terceiros (seleção)',
-                      '{:,}'.format(len(garantia_varejo_selecao['SERIAL'])).replace(',', '.'))
+        t5r0c1.metric('Garantia entregues ao lab (seleção).',
+                      '{:,}'.format(len(garantia_varejo_selecao.loc[garantia_varejo_selecao['ENDEREÇO'] == "LAB", 'SERIAL'])).replace(',', '.'))
+        t5r0c2.metric('Garantia entregues a terceiros (seleção).',
+                      '{:,}'.format(len(garantia_varejo_selecao.loc[garantia_varejo_selecao['ENDEREÇO'].isin(['EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'SERIAL'])).replace(',', '.'))
+        t5r0c3.metric('Garantia em estoque (seleção).',
+                      '{:,}'.format(len(garantia_varejo_selecao.loc[~garantia_varejo_selecao['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'SERIAL'])).replace(',', '.'))
     else:
-        t5r0c1.metric('Total em posse de terceiros',
-                      '{:,}'.format(sum(df_garantia_varejo_resumido['QUANTIDADE'])).replace(',', '.'))
+        t5r0c1.metric('Garantia entregues ao lab',
+                      '{:,}'.format(sum(df_garantia_varejo_resumido.loc[df_garantia_varejo_resumido['ENDEREÇO'] == 'LAB', 'QUANTIDADE'])).replace(',', '.'))
+        t5r0c2.metric('Garantia entregues a terceiros (seleção).',
+                      '{:,}'.format(len(df_garantia_varejo_resumido.loc[df_garantia_varejo_resumido['ENDEREÇO'].isin(['EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'QUANTIDADE'])).replace(',', '.'))
+        t5r0c3.metric('Garantia em estoque (seleção).',
+                      '{:,}'.format(len(df_garantia_varejo_resumido.loc[~df_garantia_varejo_resumido['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']), 'QUANTIDADE'])).replace(',', '.'))
 
     if 'garantia_varejo_selecao' in st.session_state and garantia_varejo.selection.rows:
         t5r1c2.write('Classificação dos equipamentos em posse de terceiros de acordo com % do SLA.')
