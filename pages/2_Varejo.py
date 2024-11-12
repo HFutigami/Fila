@@ -241,7 +241,7 @@ else:
 
     def create_df_garantia_varejo(df):
         df_garantia_varejo = df.copy()
-        df_garantia_varejo = df_garantia_varejo[df_garantia_varejo['GARANTIA'] == 'SIM']
+        df_garantia_varejo = df_garantia_varejo[(df_garantia_varejo['FLUXO'] == 'VAREJO') & (df_garantia_varejo['GARANTIA'] == 'SIM')]
 
         return df_garantia_varejo
 
