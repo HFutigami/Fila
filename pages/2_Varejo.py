@@ -885,7 +885,7 @@ else:
                                                                          ['ENDEREÇO', 'CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
                                                                           'NUM OS', 'ENTRADA GERFLOOR', 'ENTRADA FILA',
                                                                           'AGING TOTAL', 'AGING FILA',
-                                                                          'STATUS']].sort_values(['ENTRADA GERFLOOR']),
+                                                                          'STATUS']].sort_values(['ENTRADA GERFLOOR'], ascending=False),
                          hide_index=True,
                          use_container_width=True,
                          column_config={
@@ -899,7 +899,7 @@ else:
                                                                          ['ENDEREÇO', 'CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
                                                                           'NUM OS', 'ENTRADA GERFLOOR', 'ENTRADA FILA',
                                                                           'SAÍDA FILA', 'AGING TOTAL', 'AGING FILA',
-                                                                          'STATUS']].sort_values(['SAÍDA FILA']),
+                                                                          'STATUS']].sort_values(['SAÍDA FILA'], ascending=False),
                          hide_index=True,
                          use_container_width=True,
                          column_config={
