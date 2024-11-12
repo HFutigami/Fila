@@ -239,6 +239,24 @@ else:
 
         return df
 
+    def create_df_garantia_varejo(df):
+        df_garantia_varejo = df.copy()
+        df_garantia_varejo = df_garantia_varejo[df_garantia_varejo['GARANTIA'] == 'SIM']
+
+        return df_garantia_varejo
+
+
+    def create_df_garantia_varejo_resumido(df):
+
+        df = df.groupby(['CLIENTE'])[['SERIAL']].count().reset_index()
+        df = df.rename(columns={'SERIAL': 'QUANTIDADE'})
+        try:
+            df = df.sort_values([['CLIENTE', 'EQUIPAMENTO']])
+        except:
+            pass
+
+        return df
+
 
     def create_fig_criticos(df):
         df['CAIXA'] = df['CAIXA'].astype('str')
@@ -538,7 +556,7 @@ else:
     st.sidebar.header('')
     st.sidebar.title('AÇÕES')
 
-    tabs_saldo, tabs_liberado, tabs_saida, tabs_terceiros, tabs_geral = st.tabs(['Saldo', 'Liberado', 'Saídas', 'Terceiros', 'Tabela Geral'])
+    tabs_saldo, tabs_liberado, tabs_saida, tabs_terceiros, tabs_garantia tabs_geral = st.tabs(['Saldo', 'Liberado', 'Saídas', 'Terceiros', 'Garantia', 'Tabela Geral'])
 
     tabs_saldo.title('Saldo de Varejo')
     r0c1, r0c2, r0c3, r0c4 = tabs_saldo.columns(4, gap='large')
@@ -803,6 +821,63 @@ else:
 
         t4r2c1.write('Histórico detalhado de equipamentos entregues ao laboratório.')
         t4r2c1.dataframe(st.session_state['terceiros_varejo_selecao'][['CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
+                                                                          'NUM OS', 'ENTRADA GERFLOOR', 'ENTRADA FILA',
+                                                                          'SAÍDA FILA', 'AGING TOTAL', 'AGING FILA',
+                                                                          'STATUS']].sort_values(['SAÍDA FILA']),
+                         hide_index=True,
+                         use_container_width=True,
+                         column_config={
+                             'ENTRADA GERFLOOR': st.column_config.DateColumn('ENTRADA GERFLOOR', format='DD/MM/YYYY'),
+                             'ENTRADA FILA': st.column_config.DateColumn('ENTRADA FILA', format='DD/MM/YYYY HH:mm:ss'),
+                             'SAÍDA FILA': st.column_config.DateColumn('SAÍDA FILA', format='DD/MM/YYYY HH:mm:ss')
+                         })
+
+    
+    tabs_garantia.title('Relações dos equipamentos em garantia')
+    t5r0c1, t5r0c2, t5r0c3, t5r0c4 = tabs_garantia.columns(4)
+    tabs_garantia.write('')
+    t5r1c1, t5r1c2 = tabs_terceiros.columns(2, gap='large')
+    t5r2c1, t5r2c2 = tabs_terceiros.columns([6, 4], gap='large')
+
+    if 'df_garantia_varejo' not in st.session_state or 'df_terceiros_varejo_resumido' not in st.session_state:
+        st.session_state['df_garantia_varejo'] = create_df_garantia_varejo(historico_fila)
+        st.session_state['df_garantia_varejo_resumido'] = create_df_garantia_varejo_resumido(
+            st.session_state['df_garantia_varejo'])
+
+        df_garantia_varejo = st.session_state['df_garantia_varejo']
+        df_garantia_varejo_resumido = st.session_state['df_garantia_varejo_resumido']
+    else:
+        df_garantia_varejo = st.session_state['df_garantia_varejo']
+        df_garantia_varejo_resumido = st.session_state['df_garantia_varejo_resumido']
+
+    t5r1c1.write('Resumo de equipamentos em garantia.')
+    garantia_varejo = t5r1c1.dataframe(df_garantia_varejo_resumido[['CLIENTE', 'QUANTIDADE']],
+                                           hide_index=True,
+                                           use_container_width=True,
+                                           on_select='rerun')
+
+    if garantia_varejo.selection.rows:
+        filtro_saldo = list(df_garantia_varejo_resumido.iloc[garantia_varejo.selection.rows]['CLIENTE'])
+        garantia_varejo_selecao = df_garantia_varejo[df_garantia_varejo['CLIENTE'].isin(filtro_saldo)]
+        st.session_state['garantia_varejo_selecao'] = garantia_varejo_selecao
+
+        t5r0c1.metric('Total em posse de terceiros (seleção)',
+                      '{:,}'.format(len(garantia_varejo_selecao['SERIAL'])).replace(',', '.'))
+    else:
+        t5r0c1.metric('Total em posse de terceiros',
+                      '{:,}'.format(sum(df_garantia_varejo_resumido['QUANTIDADE'])).replace(',', '.'))
+
+    if 'garantia_varejo_selecao' in st.session_state and garantia_varejo.selection.rows:
+        t5r1c2.write('Classificação dos equipamentos em posse de terceiros de acordo com % do SLA.')
+        t5r1c2.plotly_chart(create_fig_criticos(st.session_state['garantia_varejo_selecao'][
+                                                    ~st.session_state['garantia_varejo_selecao'][
+                                                        '% DO SLA'].isna()].copy()))
+
+        t5r2c2.write('Status dos equipamentos em relação ao SLA.')
+        t5r2c2.plotly_chart(create_fig_status(st.session_state['garantia_varejo_selecao']))
+
+        t5r2c1.write('Histórico detalhado de equipamentos entregues ao laboratório.')
+        t5r2c1.dataframe(st.session_state['garantia_varejo_selecao'][['CAIXA', 'SERIAL', 'CLIENTE', 'EQUIPAMENTO',
                                                                           'NUM OS', 'ENTRADA GERFLOOR', 'ENTRADA FILA',
                                                                           'SAÍDA FILA', 'AGING TOTAL', 'AGING FILA',
                                                                           'STATUS']].sort_values(['SAÍDA FILA']),
