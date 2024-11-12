@@ -836,8 +836,8 @@ else:
     tabs_garantia.title('Relações dos equipamentos em garantia')
     t5r0c1, t5r0c2, t5r0c3, t5r0c4 = tabs_garantia.columns(4)
     tabs_garantia.write('')
-    t5r1c1, t5r1c2 = tabs_terceiros.columns(2, gap='large')
-    t5r2c1, t5r2c2 = tabs_terceiros.columns([6, 4], gap='large')
+    t5r1c1, t5r1c2 = tabs_garantia.columns(2, gap='large')
+    t5r2c1, t5r2c2 = tabs_garantia.columns([6, 4], gap='large')
 
     if 'df_garantia_varejo' not in st.session_state or 'df_terceiros_varejo_resumido' not in st.session_state:
         st.session_state['df_garantia_varejo'] = create_df_garantia_varejo(historico_fila)
