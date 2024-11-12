@@ -878,9 +878,7 @@ else:
 
     if 'garantia_varejo_selecao' in st.session_state and garantia_varejo.selection.rows:
         t5r1c2.write('Classificação dos equipamentos em posse de terceiros de acordo com % do SLA.')
-        t5r1c2.plotly_chart(create_fig_criticos(st.session_state['garantia_varejo_selecao'][
-                                                    ~st.session_state['garantia_varejo_selecao'][
-                                                        '% DO SLA'].isna()].copy()))
+        t5r1c2.plotly_chart(create_fig_criticos(st.session_state['garantia_varejo_selecao'][(~st.session_state['garantia_varejo_selecao']['% DO SLA'].isna()) & (~st.session_state['garantia_varejo_selecao']['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS'])].copy()))
 
         t5r2c1.write('Saldo de equipamentos com garantia no fila.')
         t5r2c1.dataframe(st.session_state['garantia_varejo_selecao'].loc[~st.session_state['garantia_varejo_selecao']['ENDEREÇO'].isin(['LAB', 'EQUIPE TECNICA', 'QUALIDADE', 'RETRIAGEM', 'GESTAO DE ATIVOS']),
